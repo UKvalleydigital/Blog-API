@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -10,6 +11,20 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 
 const app = express();
+
+// Database setup
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
+if (process.env.PROCESS.ENV === 'production') {
+  const mongoDB = process.env.DB_URL_PROD;
+} else {
+  const mongoDB = process.env.DB_URL;
+}
+
+main().catch(err => console.log(err));
+async function main() {
+  mongoose.connect(mongoDB);
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
