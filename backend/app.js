@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -13,17 +14,17 @@ const indexRouter = require('./routes/index');
 const app = express();
 
 // Database setup
-const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
-if (process.env.PROCESS.ENV === 'production') {
+if (process.env.PROCESS_ENV === 'production') {
   const mongoDB = process.env.DB_URL_PROD;
+  main(mongoDB).catch(err => console.log(err));
 } else {
   const mongoDB = process.env.DB_URL;
+  main(mongoDB).catch(err => console.log(err));
 }
 
-main().catch(err => console.log(err));
-async function main() {
-  mongoose.connect(mongoDB);
+async function main(url) {
+  mongoose.connect(url);
 }
 
 // view engine setup
@@ -36,8 +37,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
