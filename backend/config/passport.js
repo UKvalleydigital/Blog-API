@@ -14,7 +14,7 @@ exports.verify = function(token, result) {
 };
 
 exports.sign = function(payload) {
-    jwt.sign(payload, process.env.SECRET, (err, token) => {
+    jwt.sign(payload, process.env.SECRET, { expiresIn: '7d' }, (err, token) => {
         res.json({token});
     });
 };
