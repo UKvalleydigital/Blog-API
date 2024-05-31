@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const verify = require('../config/passport').verify;
 const asyncHandler = require('express-async-handler');
 const validationResult = require('express-validator');
 
@@ -17,12 +18,12 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
         req.body.comments = typeof req.body.comments === 'undefined'
         ? [] : [req.body.comments];
     }
-
+    
     const errors = validationResult(req);
     if (!errors.empty()) {
         res.json(errors.array());
     }
-
+    
     const createdPost = new Post({
         user: req.body.user,
         comments: typeof req.body.comments === 'undefined'
@@ -34,7 +35,7 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     });
     
     createdPost.save();
-    res.json(createdPost);
+    verify(req.token, createdPost);
 });
 
 
@@ -43,29 +44,29 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
         req.body.comments = typeof req.body.comments === 'undefined'
         ? [] : [req.body.comments];
     }
-
+    
     const errors = validationResult(req);
     if (!errors.empty()) {
         res.json(errors.array());
     }
-
+    
     const updatedPost = Post.findByIdAndUpdate(req.params.id);
     
     updatedPost.save();
-    res.json(updatedPost);
+    verify(req.token, updatedPost);
 });
 
 exports.postId_delete = asyncHandler(async (req, res, next) => {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
-
+    
     res.json(deletedPost);
 });
 
 exports.postId_get = asyncHandler(async (req, res, next) => {
     const post = Post.findById(req.params.id)
-        .populate('user')
-        .populate('comment')
-        .exec()
+    .populate('user')
+    .populate('comment')
+    .exec()
 
     res.json(post);
 });

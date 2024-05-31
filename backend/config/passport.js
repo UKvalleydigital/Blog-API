@@ -1,10 +1,23 @@
-const jwt = require('json webtoken')
+const jwt = require('jsonwebtoken')
+
+exports.verify = function(token, result) {
+    jwt.verify(token, process.env.SECRET, (err, authData) => {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            res.json({
+                authData,
+                result
+            });
+        }
+    });
+};
 
 exports.sign = function(payload) {
     jwt.sign(payload, process.env.SECRET, (err, token) => {
         res.json({token});
-    })
-}
+    });
+};
 
 exports.verify_token = function(req, res, next) {
     const bearer = req.headers['authorization'];
