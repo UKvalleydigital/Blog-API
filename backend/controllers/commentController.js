@@ -1,5 +1,6 @@
 const validationResult = require('express-validator');
 const Comment = require('../models/comment');
+const verify = require('../config/passport');
 const asyncHandler = require('express-async-handler');
 
 exports.comment_list = asyncHandler(async (req, res, next) => {
@@ -24,8 +25,8 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
     });
 
     createdComment.save();
-    res.json(createdComment);
-})
+    verify(req.token, createdComment);
+});
 
 exports.commentId_update = asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -36,11 +37,11 @@ exports.commentId_update = asyncHandler(async (req, res, next) => {
     const updatedComment = await Comment.findByIdAndUpdate(req.params.id);
     
     updatedComment.save();
-    res.json(updatedComment);
+    verify(req.token, updatedComment);
 });
 
 exports.commentId_delete = asyncHandler(async (req, res, next) => {
     const deletedComment = await Comment.findByIdAndDelete(req.params.id);
 
-    res.json(deletedComment);
+    verify(req.token, deletedComment);
 });
