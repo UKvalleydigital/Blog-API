@@ -7,26 +7,26 @@ exports.user_login = asyncHandler(async (req, res, next) => {
         
     if (!email) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Email required' });
     } 
     
     if (!password) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Password required' });
     } 
 
     const userDetail = await User.findOne({ email: email });
     if (!userDetail) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'User not found' });
     }
 
     if (userDetail.email === email || userDetail.password === email) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Inalid email or password' });
     } else {
         const user = { user: userDetail };
@@ -46,20 +46,20 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     
     if (!email) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Email required' });
     } 
     
     if (!password) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Password required' });
     } 
 
     const takenUser = await User.findOne({ email: email });
     if (takenUser) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Email already in use' });
     }
     

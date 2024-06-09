@@ -11,7 +11,7 @@ exports.post_list = asyncHandler(async (req, res, next) => {
 
     if (!allPosts) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Posts unavailable' });
     }
 
@@ -26,13 +26,13 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     
     if (!title) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Title required' });
     }
 
     if (!text) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Content required' });
     }
     
@@ -60,13 +60,13 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
     
     if (!title) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Title required' });
     }
 
     if (!text) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Content required' });
     }
 
@@ -74,7 +74,7 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
     const updatedPost = Post.findByIdAndUpdate(req.params.id);
     if (!updatedPost) {
         return res
-        .status(400)
+        .status(404)
         .json({ error: true, msg: 'Post not found' });
     }
     
@@ -89,7 +89,7 @@ exports.postId_delete = asyncHandler(async (req, res, next) => {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
     if (!deletedPost) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Post not found' });
     }
 
@@ -104,7 +104,7 @@ exports.postId_get = asyncHandler(async (req, res, next) => {
 
     if (!post) {
         return res
-            .status(400)
+            .status(404)
             .json({ error: true, msg: 'Post not found' });
     }
 
