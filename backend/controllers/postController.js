@@ -19,9 +19,11 @@ exports.post_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.post_create_post = asyncHandler(async (req, res, next) =>{
-    if (!Array.isArray(req.body.comments)) {
-        req.body.comments = typeof req.body.comments === 'undefined'
-        ? [] : [req.body.comments];
+    const { comments, title, text } = req.body;
+    
+    if (!Array.isArray(comments)) {
+        comments = typeof comments === 'undefined'
+        ? [] : [comments];
     }
     
     if (!title) {
@@ -37,12 +39,12 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     }
     
     const createdPost = new Post({
-        user: req.body.user,
-        comments: typeof req.body.comments === 'undefined'
-        ? [] : req.body.comments,
-        title: req.body.title,
+        user,
+        comments: typeof comments === 'undefined'
+        ? [] : comments,
+        title,
         published: req.body.published,
-        text: req.body.text,
+        text,
         date_posted: Date.now() 
     });
     
@@ -53,30 +55,21 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
 
 
 exports.postId_update = asyncHandler(async (req, res, next) => {
-    if (!Array.isArray(req.body.comments)) {
-        req.body.comments = typeof req.body.comments === 'undefined'
-        ? [] : [req.body.comments];
-    }
+    const comments = req.body.comments;
     
-    if (!title) {
-        return res
-            .status(404)
-            .json({ error: true, msg: 'Title required' });
+    if (!Array.isArray(comments)) {
+        comments = typeof comments === 'undefined'
+        ? [] : [comments];
     }
 
-    if (!text) {
-        return res
-            .status(404)
-            .json({ error: true, msg: 'Content required' });
-    }
-
-    
-    const updatedPost = Post.findByIdAndUpdate(req.params.id);
-    if (!updatedPost) {
+    const post = Post.findOne(req.params.id);
+    if (!post) {
         return res
         .status(404)
         .json({ error: true, msg: 'Post not found' });
     }
+
+    const updatedPost = Post.findByIdAndUpdate(req.params.id);
     
     if (published) updatedPost.published = true;
 
@@ -86,12 +79,14 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
 });
 
 exports.postId_delete = asyncHandler(async (req, res, next) => {
-    const deletedPost = await Post.findByIdAndDelete(req.params.id);
-    if (!deletedPost) {
+    const post = Post.findOne(req.params.id);
+    if (!post) {
         return res
             .status(404)
             .json({ error: true, msg: 'Post not found' });
     }
+    
+    const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
     res.json({ error: false, deletedPost });
 });
