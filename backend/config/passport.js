@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken')
 
-exports.verify = function(token, result) {
+exports.verify = function(token) {
     jwt.verify(token, process.env.SECRET, (err, authData) => {
         if (err) {
-            res.sendStatus(403);
+            res.sendStatus(404);
         } else {
             res.json({
-                authData,
-                result
+                authData
             });
         }
     });
@@ -19,12 +18,13 @@ exports.sign = function(payload) {
     });
 };
 
-exports.verify_token = function(req, res, next) {
+exports.authorize = function(req, res, next) {
     const bearer = req.headers['authorization'];
     if (typeof bearer !== 'undefined') {
         const bearerArray = bearer.split(' ');
         const token = bearerArray[1]
         req.token = token;
+        verify(token);
         next();
     } else {
         res.json({msg: 'not authorised'});
