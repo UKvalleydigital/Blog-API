@@ -1,7 +1,6 @@
 const Post = require('../models/post');
 const verify = require('../config/passport').verify;
 const asyncHandler = require('express-async-handler');
-const validationResult = require('express-validator');
 
 exports.post_list = asyncHandler(async (req, res, next) => {
     const allPosts = await Post.find({})
@@ -10,7 +9,13 @@ exports.post_list = asyncHandler(async (req, res, next) => {
         .populate('comment')
         .exec()
 
-    res.json(allPosts);
+    if (!allPosts) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Posts unavailable' });
+    }
+
+    res.json({error: false, allPosts });
 });
 
 exports.post_create_post = asyncHandler(async (req, res, next) =>{
@@ -19,9 +24,16 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
         ? [] : [req.body.comments];
     }
     
-    const errors = validationResult(req);
-    if (!errors.empty()) {
-        res.json(errors.array());
+    if (!title) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Title required' });
+    }
+
+    if (!text) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Content required' });
     }
     
     const createdPost = new Post({
@@ -36,6 +48,7 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     
     createdPost.save();
     verify(req.token, createdPost);
+    return res.json({ error: false, createdPost });
 });
 
 
@@ -45,21 +58,42 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
         ? [] : [req.body.comments];
     }
     
-    const errors = validationResult(req);
-    if (!errors.empty()) {
-        res.json(errors.array());
+    if (!title) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Title required' });
     }
+
+    if (!text) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Content required' });
+    }
+
     
     const updatedPost = Post.findByIdAndUpdate(req.params.id);
+    if (!updatedPost) {
+        return res
+        .status(400)
+        .json({ error: true, msg: 'Post not found' });
+    }
     
+    if (published) updatedPost.published = true;
+
     updatedPost.save();
     verify(req.token, updatedPost);
+    res.json({ error: false, updatedPost });
 });
 
 exports.postId_delete = asyncHandler(async (req, res, next) => {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
-    
-    res.json(deletedPost);
+    if (!deletedPost) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Post not found' });
+    }
+
+    res.json({ error: false, deletedPost });
 });
 
 exports.postId_get = asyncHandler(async (req, res, next) => {
@@ -68,5 +102,11 @@ exports.postId_get = asyncHandler(async (req, res, next) => {
     .populate('comment')
     .exec()
 
-    res.json(post);
+    if (!post) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Post not found' });
+    }
+
+    res.json({ error: false, post });
 });
