@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 exports.verify = function(token) {
     jwt.verify(token, process.env.SECRET, (err, authData) => {
         if (err) {
-            res.sendStatus(404);
+            return res.sendStatus(404);
         } else {
-            res.json({
+            return res.json({
                 authData
             });
         }
@@ -14,7 +14,7 @@ exports.verify = function(token) {
 
 exports.sign = function(payload) {
     jwt.sign(payload, process.env.SECRET, { expiresIn: '7d' }, (err, token) => {
-        res.json({token});
+        return res.json({token});
     });
 };
 
@@ -27,6 +27,6 @@ exports.authorize = function(req, res, next) {
         verify(token);
         next();
     } else {
-        res.json({msg: 'not authorised'});
+        return res.json({msg: 'not authorised'});
     }
 };
