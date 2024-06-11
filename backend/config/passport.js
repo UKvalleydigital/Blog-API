@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 exports.verify = function(token) {
     jwt.verify(token, process.env.SECRET, (err, authData) => {
         if (err) {
-            return res.sendStatus(404);
+            res.sendStatus(404);
         } else {
             return res.json({
                 authData
