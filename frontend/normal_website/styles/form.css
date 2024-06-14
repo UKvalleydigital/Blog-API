@@ -1,0 +1,65 @@
+@import '../../node_modules/modern-normalize/modern-normalize.css';
+
+.form_container, h1 {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.form_container {
+    background-color: rgb(235, 235, 235);
+    border: 1px solid gainsboro;
+    border-radius: 7%;
+    margin-top: 2%;
+    padding: 20px 30px;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: x-large;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+label {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    color: white;
+    background-color: rgb(51, 145, 233);
+    border-radius: 10%;
+    border: none;
+    max-width: fit-content;
+    padding: 4px 12px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+input {
+    border: 1px solid gainsboro;
+    border-radius: 3%;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid rgb(206, 206, 206);
+    background-color: rgb(206, 206, 206);
+}
+
+.password_container {
+    display: inline-flex;
+    gap: 11px;
+}
+
+i:hover {
+    opacity: 0.6;
+}
