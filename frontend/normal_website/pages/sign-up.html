@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../styles/default.css">
     <link rel="stylesheet" href="../styles/form.css">
+
     <title>Sign-up</title>
 </head>
 <body>
@@ -15,12 +16,15 @@
             <label for="email">Email:
                 <input type="email" id="email">
             </label>
-            <label for="password">Password:
-                <input type="password" id ="password">
+            <div class="password_container">
+                <label for="password">Password:
+                    <input type="password" id ="password">
+                </label>
                 <i class="fa fa-eye" aria-hidden="true"></i>
-            </label>
+            </div>
             <button type="submit">Register</button>
         </form>
     </div>
 </body>
+<script src="../elements/password_icon.js" defer></script>
 </html>
