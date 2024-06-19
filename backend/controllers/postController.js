@@ -15,7 +15,7 @@ exports.post_list = asyncHandler(async (req, res, next) => {
             .json({ error: true, msg: 'Posts unavailable' });
     }
 
-    res.json({error: false, allPosts });
+    return res.json({ error: false, allPosts });
 });
 
 exports.post_create_post = asyncHandler(async (req, res, next) =>{
