@@ -1,0 +1,21 @@
+h1, h2 {
+    margin-left: 10px;
+}
+
+ul {
+    display: flex;
+    list-style-type: none;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+li {
+    background-color: rgb(235, 235, 235);
+    border: 1px solid gainsboro;
+    border-radius: 7%;
+    padding: 4px 12px;
+}
+
+li:hover {
+    opacity: 0.7;
+}
