@@ -1,4 +1,4 @@
-import Post from './elements/post.js';
+import { Post, givePostForm, deletePostForm } from './elements/post.js';
 
 // Display posts
 function createList(list) {
@@ -17,4 +17,8 @@ const response = Post().returnPosts();
 response.push('post 4');
 
 createList(response);
+
+// Display form 
+const create = document.querySelector('.create');
+create.onclick = givePostForm;
 
