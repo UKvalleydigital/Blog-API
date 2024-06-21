@@ -5,11 +5,21 @@ h1, h2 {
 ul {
     display: flex;
     list-style-type: none;
-    gap: 20px;
+    gap: 30px;
     flex-wrap: wrap;
 }
 
-li {
+header {
+    background-color: rgb(51, 145, 233);
+    padding: 5px;
+}
+
+.header_list > li > a {
+    text-decoration: none;
+    color: rgb(235, 235, 235);
+}
+
+.post_list > li {
     background-color: rgb(235, 235, 235);
     border: 1px solid gainsboro;
     border-radius: 7%;

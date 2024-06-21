@@ -4,3 +4,20 @@
 * {
     font-family: 'Roboto', sans-serif
 }
+
+ul {
+    display: flex;
+    list-style-type: none;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+header {
+    background-color: rgb(51, 145, 233);
+    padding: 5px;
+}
+
+.header_list > li > a {
+    text-decoration: none;
+    color: rgb(235, 235, 235);
+}
