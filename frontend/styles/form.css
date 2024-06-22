@@ -42,7 +42,7 @@ button:hover {
     opacity: 0.8;
 }
 
-input {
+input, textarea {
     border: 1px solid gainsboro;
     border-radius: 3%;
 }
@@ -51,6 +51,17 @@ input:focus {
     outline: none;
     border: 1px solid rgb(206, 206, 206);
     background-color: rgb(206, 206, 206);
+}
+
+textarea:focus {
+    outline: none;
+    border: 1px solid rgb(206, 206, 206);
+    background-color: rgb(206, 206, 206);
+}
+
+#Text {
+    height: 200px;
+    width: 300px;
 }
 
 .password_container {

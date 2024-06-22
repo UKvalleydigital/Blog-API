@@ -24,18 +24,31 @@ function givePostForm () {
         { name: 'Text', input: 'text' }
     ];
 
+    const add = document.querySelector('#create');
+    add.style.visibility = 'hidden';
+
+    const div = document.createElement('div');
+    div.classList.add('form_container');
+
     const form = document.createElement('form');
     
     postArray.forEach(element => {
         const label = document.createElement('label');
-        const input = document.createElement('input')
+        let input = document.createElement('input');
+        let boolean = true;
 
+        
         label.for = element.name;
         label.textContent = `${element.name}: `;
-        input.id = element.name;
-        input.type = element.input;
 
-        if (input.type === 'radio') input.value = 'True';
+        if (element.input === 'text') {
+            input = document.createElement('textarea');
+            input.name = element.name;
+            boolean = false;
+        }
+
+        input.id = element.name;
+        if (boolean) input.type = element.input;
         
         form.appendChild(label);
         form.appendChild(input);
@@ -52,12 +65,16 @@ function givePostForm () {
     form.appendChild(cancel);
     form.classList.add('post_form');
 
-    document.body.appendChild(form);
+    div.appendChild(form);
+    document.body.appendChild(div);
 }
 
 function deletePostForm () {
-    const form = document.querySelector('.post_form');
-    form.remove();
+    const add = document.querySelector('#create');
+    add.style.visibility = 'visible';
+
+    const div = document.querySelector('form_container');
+    div.remove();
 }
 
 export { Post, givePostForm, deletePostForm };
