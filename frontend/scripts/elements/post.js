@@ -3,7 +3,7 @@ function Post () {
     const returnPosts = () => postList;
 
     const createPost = () => {
-
+   
     };
 
     const getPosts = () => {
@@ -31,6 +31,8 @@ function givePostForm () {
     div.classList.add('form_container');
 
     const form = document.createElement('form');
+    form.action = '/post_form';
+    form.method = 'POST';
     
     postArray.forEach(element => {
         const label = document.createElement('label');
