@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const sign = require('../config/passport').sign;
 const asyncHandler = require('express-async-handler');
+const bcrypt = require('bcryptjs');
 
 exports.user_login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
@@ -62,11 +63,19 @@ exports.user_register = asyncHandler(async (req, res, next) => {
             .status(404)
             .json({ error: true, msg: 'Email already in use' });
     }
-    
-    const user = new User({
-        email,
-        username,
-        password
+
+    bcrypt.hash(password, 10, async (err, hashedPassword) => {
+        try {
+            const user = new User({
+                email,
+                username,
+                hashedPassword
+            });
+        } catch (err) {
+            return res
+                .status(404)
+                .json({ error: true, msg: 'Server error' })
+        }
     });
 
     await user.save();
