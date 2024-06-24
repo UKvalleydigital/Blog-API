@@ -11,7 +11,8 @@ function Post () {
         fetch(url, { method: 'GET' })
             .then(res => res.json())
             .then(res => res.allPosts)
-            .then(res => postList.push(res));
+            .then(res => postList.push(res))
+            .catch(err => console.error(err));
     };
 
     return { createPost, getPosts, returnPosts };
@@ -37,7 +38,6 @@ function givePostForm () {
         const label = document.createElement('label');
         let input = document.createElement('input');
         let boolean = true;
-
         
         label.for = element.name;
         label.textContent = `${element.name}: `;

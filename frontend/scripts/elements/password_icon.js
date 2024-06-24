@@ -1,7 +1,6 @@
 const icon = document.querySelector('i');
 const input = document.querySelector('#password');
 
-console.log(icon);
 icon.onclick = handleClick;
 
 function handleClick() {
