@@ -4,12 +4,11 @@ function Post () {
 
     const createPost = () => {
    
-   
     };
 
     const getPosts = () => {
         const url = `http://localhost:3000/posts`
-        fetch(url, { method: 'GET' })
+        fetch(url, { method: 'GET', mode: 'cors' })
             .then(res => res.json())
             .then(res => res.allPosts)
             .then(res => postList.push(res))
