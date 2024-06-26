@@ -4,6 +4,7 @@ function Post () {
 
     const createPost = () => {
    
+   
     };
 
     const getPosts = () => {
