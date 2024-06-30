@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
     email: { type: String, maxLength: 70, required: true },
-    password: { type: String, maxLength: 40, required: true },
+    password: { type: String, required: true },
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 });

@@ -12,6 +12,7 @@ require('dotenv').config();
 const routes = require('./routes/index');
 
 const app = express();
+app.use(cors({ origin: true, credentials: true }));
 
 // Database setup
 mongoose.set('strictQuery', false);
@@ -33,11 +34,10 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cors());
 
 app.use('/', routes);
 

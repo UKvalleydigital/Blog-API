@@ -31,7 +31,7 @@ exports.user_login = asyncHandler(async (req, res, next) => {
             .json({ error: true, msg: 'Inalid email or password' });
     } else {
         const user = { user: userDetail };
-        const token = sign(user);
+        const token = sign(user, req, res);
 
         return res.json({
             error: false,
@@ -47,43 +47,38 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     
     if (!email) {
         return res
-            .status(404)
+            .status(400)
             .json({ error: true, msg: 'Email required' });
     } 
     
     if (!password) {
         return res
-            .status(404)
+            .status(400)
             .json({ error: true, msg: 'Password required' });
     } 
 
     const takenUser = await User.findOne({ email: email });
     if (takenUser) {
         return res
-            .status(404)
-            .json({ error: true, msg: 'Email already in use' });
+            .json({ error: true, msg: 'User already in use' });
     }
 
-    bcrypt.hash(password, 10, async (err, hashedPassword) => {
-        try {
-            const user = new User({
-                email,
-                username,
-                hashedPassword
-            });
-        } catch (err) {
-            return res
-                .status(404)
-                .json({ error: true, msg: 'Server error' })
-        }
-    });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    await user.save();
-    const token = sign(user);
-    return res.json({
-        error: false,
-        user,
-        token,
-        msg: 'Success register'
+    const user = new User({
+        email,
+        password: hashedPassword
     });
+    
+    await user.save();
+    const token = sign(user, req, res);
+    if (user) {
+        res.json({
+            error: false,
+            user,
+            token,
+            msg: 'Success register'
+        });
+    }
 });

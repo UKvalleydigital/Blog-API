@@ -3,7 +3,17 @@ function Post () {
     const returnPosts = () => postList;
 
     const createPost = () => {
-   
+        const form = document.querySelector('.post_form');
+        if (!form) return;
+
+        const create = document.querySelector('create');
+        create.addEventListener('submit', (e) =>{
+            e.preventDefault();
+
+            const comments = [];
+        })
+
+        // To be continued...
     };
 
     const getPosts = () => {
@@ -56,6 +66,7 @@ function givePostForm () {
     });
 
     const create = document.createElement('button');
+    create.addClassList('create');
     const cancel = document.createElement('button');
     cancel.onclick = deletePostForm;
 

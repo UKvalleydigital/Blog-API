@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-exports.verify = function(token) {
+exports.verify = function(token, req, res) {
     jwt.verify(token, process.env.SECRET, (err, authData) => {
         if (err) {
             res.sendStatus(404);
@@ -12,7 +12,7 @@ exports.verify = function(token) {
     });
 };
 
-exports.sign = function(payload) {
+exports.sign = function(payload, req, res) {
     jwt.sign(payload, process.env.SECRET, { expiresIn: '7d' }, (err, token) => {
         return res.json({token});
     });
