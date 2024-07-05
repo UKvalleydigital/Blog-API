@@ -12,7 +12,7 @@ require('dotenv').config();
 const routes = require('./routes/index');
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 
 // Database setup
 mongoose.set('strictQuery', false);
@@ -33,11 +33,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json());
+app.use(express.json({
+  type: ['application/json', 'text/plain']
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Write header
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.use('/', routes);
 

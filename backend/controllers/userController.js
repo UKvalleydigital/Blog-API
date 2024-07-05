@@ -74,7 +74,7 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     await user.save();
     const token = sign(user, req, res);
     if (user) {
-        res.json({
+        return res.json({
             error: false,
             user,
             token,

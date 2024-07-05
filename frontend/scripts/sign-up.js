@@ -1,16 +1,23 @@
-// import axiosInstance from "../utils/axios_instance";
-
 // Sign up authentication
 
-const button = document.querySelector('button');
-button.addEventListener('click', (e) => {
+const form = document.querySelector('form');
+form.addEventListener('submit', (e) => {
     e.preventDefault();
+
     const email = document.querySelector('#email').value;
     const password = document.querySelector('#password').value;
 
-    axios.post('http://localhost:3000/register', {
-        email: email,
-        password: password
-    })  .then(res => console.log(res))
-        .catch(error => console.log(error));
-});
+    const data = { email, password };
+    const jsonData = JSON.stringify(data)
+    console.log(jsonData);
+
+    const url = `http://localhost:3000/register`
+    fetch(url, {
+        method: 'POST',
+        body: jsonData,
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+})
