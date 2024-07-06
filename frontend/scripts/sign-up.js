@@ -9,7 +9,6 @@ form.addEventListener('submit', (e) => {
 
     const data = { email, password };
     const jsonData = JSON.stringify(data)
-    console.log(jsonData);
 
     const url = `http://localhost:3000/register`
     fetch(url, {

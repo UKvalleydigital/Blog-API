@@ -1,7 +1,8 @@
 const User = require('../models/user');
-const sign = require('../config/passport').sign;
+const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
+require('dotenv').config;
 
 exports.user_login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
@@ -72,13 +73,16 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     });
     
     await user.save();
-    const token = sign(user, req, res);
+    const token = jwt.sign({ user }, process.env.SECRET, {
+        expiresIn: '3d'
+    });
+
     if (user) {
         return res.json({
             error: false,
             user,
             token,
-            msg: 'Success register'
+            msg: 'Successful register'
         });
     }
 });

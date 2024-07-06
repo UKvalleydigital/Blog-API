@@ -12,12 +12,6 @@ exports.verify = function(token, req, res) {
     });
 };
 
-exports.sign = function(payload, req, res) {
-    jwt.sign(payload, process.env.SECRET, { expiresIn: '7d' }, (err, token) => {
-        return res.json({token});
-    });
-};
-
 exports.authorize = function(req, res, next) {
     const bearer = req.headers['authorization'];
     if (typeof bearer !== 'undefined') {
