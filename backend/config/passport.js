@@ -5,7 +5,7 @@ exports.verify = function(token, req, res) {
         if (err) {
             res.sendStatus(404);
         } else {
-            return res.json({
+            res.json({
                 authData
             });
         }
@@ -18,9 +18,8 @@ exports.authorize = function(req, res, next) {
         const bearerArray = bearer.split(' ');
         const token = bearerArray[1]
         req.token = token;
-        verify(token);
         next();
     } else {
-        return res.json({msg: 'not authorised'});
+        return res.json({ msg: 'not authorised' });
     }
 };

@@ -1,8 +1,42 @@
 const User = require('../models/user');
+const Post = require('../models/post');
+const passport = require('../config/passport');
 const jwt = require('jsonwebtoken');
+
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 require('dotenv').config;
+
+exports.user_create_profile = asyncHandler(async (req, res, next) => {
+
+});
+ 
+exports.user_post_list = asyncHandler(async (req, res, next) => {
+    const user = passport.verify(req.token, req, res);
+    JSON.parse(user);
+
+    if(user.blogger = true) {
+        res.json({
+            error: false,
+            posts: [],
+            msg: 'Success'
+        })
+    }
+
+    const allPostsByUser = await Post.find({ user: user.id })
+    
+    if (!user) {
+        res
+        .status(404)
+        .json({ error: true, msg: 'User not found' });
+    } else {
+        res.json({ 
+            error: false,
+            posts: allPostsByUser,
+            msg: 'Success'
+        });
+    }  
+});
 
 exports.user_login = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;

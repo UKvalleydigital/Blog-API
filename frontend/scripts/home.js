@@ -1,9 +1,19 @@
 import { Post, givePostForm } from './elements/post.js';
+import User from './elements/account.js';
+
+/*--NO ACCOUNT OPERATIONS--*/
 
 // Display posts
-function createList(list) {
+function createList(list, container, className) {
     if (list.length <=  0) return;
-    const ul = document.querySelector('.post_list');
+    let ul = null;
+
+    if (!container) {
+        ul = document.createElement('ul');
+        ul.classList.add(className);
+    } else {
+        ul = document.querySelector(`.${className}`);
+    }
 
     list.forEach(element => {
         const li = document.createElement('li');
@@ -13,12 +23,21 @@ function createList(list) {
 }
 
 Post().getPosts();
-const response = Post().returnPosts();
-response.push('post 4');
+const allPosts = Post().returnPosts();
+allPosts.push('post 4');
 
-createList(response);
+createList(response, true, 'post_list');
+
+/*--ACCOUNT ONLY OPERATIONS--*/
 
 // Display form 
 const create = document.querySelector('#create');
 create.onclick = givePostForm;
 
+// Display personal user posts
+User().getUserPosts();
+const myPosts = User().returnUserPosts();
+
+if (myPosts.length > 1) {
+    createList(myPosts, false, 'user_list');
+};

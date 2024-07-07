@@ -21,7 +21,7 @@ function Post () {
         fetch(url, { method: 'GET', mode: 'cors' })
             .then(res => res.json())
             .then(res => res.allPosts)
-            .then(res => postList.push(res))
+            .then(posts => postList.push(posts))
             .catch(err => console.error(err));
     };
 
