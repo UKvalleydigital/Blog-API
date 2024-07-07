@@ -7,8 +7,21 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 require('dotenv').config;
 
-exports.user_create_profile = asyncHandler(async (req, res, next) => {
+exports.user_profile_info = asyncHandler(async (req, res, next) => {
+    const user = passport.verify(req.token, req, res);
+    JSON.parse(user);
 
+    if (!user) {
+        res
+        .status(404)
+        .json({ error: true, msg: 'User not found' });
+    } else {
+        res.json({ 
+            error: false,
+            email: user.email,
+            msg: 'Profile created'
+        });
+    } 
 });
  
 exports.user_post_list = asyncHandler(async (req, res, next) => {

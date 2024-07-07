@@ -12,6 +12,8 @@ router.post('/login', function(req, res) {
     user_controller.user_login;
 });
 
+router.get('/profile_info', passport.authorize, user_controller.user_profile_info)
+
 router.get('/user_posts', passport.authorize, user_controller.user_post_list);
 
 module.exports = router;

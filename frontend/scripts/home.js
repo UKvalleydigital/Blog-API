@@ -30,6 +30,13 @@ createList(response, true, 'post_list');
 
 /*--ACCOUNT ONLY OPERATIONS--*/
 
+// Show user profile
+User().getProfileInfo;
+const info = User().returnEmail();
+if (info) {
+    User().createUserProfile();
+}
+
 // Display form 
 const create = document.querySelector('#create');
 create.onclick = givePostForm;
