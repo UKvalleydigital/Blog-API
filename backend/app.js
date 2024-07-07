@@ -28,10 +28,6 @@ async function main(url) {
   mongoose.connect(url);
 }
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 app.use(logger('dev'));
 app.use(express.json({
   type: ['application/json', 'text/plain']
