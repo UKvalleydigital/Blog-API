@@ -17,9 +17,9 @@ form.addEventListener('submit', (e) => {
         headers: { 'Content-Type': 'application/json' }
     })
         .then(res => res.json())
-        .then(res => `Bearer ${res.token}`)
+        .then(res => res.token)
         .then(token => {
-            window.localStorage.setItem('token', token);
+            localStorage.setItem('token', token);
             window.location.href = '../../normal_website/pages/home.html';
         })
         .catch(err => console.log(err));

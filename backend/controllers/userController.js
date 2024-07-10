@@ -1,6 +1,5 @@
 const User = require('../models/user');
 const Post = require('../models/post');
-const passport = require('../config/passport');
 const jwt = require('jsonwebtoken');
 
 const asyncHandler = require('express-async-handler');
@@ -8,45 +7,43 @@ const bcrypt = require('bcryptjs');
 require('dotenv').config;
 
 exports.user_profile_info = asyncHandler(async (req, res, next) => {
-    const user = passport.verify(req.token, req, res);
-    JSON.parse(user);
+    const user = req.user;
 
     if (!user) {
         res
-        .status(404)
-        .json({ error: true, msg: 'User not found' });
+            .status(404)
+            .json({ error: true, msg: 'User not found' });
     } else {
         res.json({ 
             error: false,
-            email: user.email,
+            email: user.user.email,
             msg: 'Profile created'
         });
     } 
 });
  
 exports.user_post_list = asyncHandler(async (req, res, next) => {
-    const user = passport.verify(req.token, req, res);
-    JSON.parse(user);
+    const user = req.user;
 
-    if(user.blogger = true) {
-        res.json({
-            error: false,
-            posts: [],
-            msg: 'Success'
-        })
-    }
-
-    const allPostsByUser = await Post.find({ user: user.id })
-    
     if (!user) {
         res
         .status(404)
         .json({ error: true, msg: 'User not found' });
+    }
+    
+    const allPostsByUser = await Post.find({ user: user.id })
+    
+    if (!user.blogger) {
+        res.json({
+            error: false,
+            posts: [],
+            msg: 'No posts given'
+        })
     } else {
         res.json({ 
             error: false,
             posts: allPostsByUser,
-            msg: 'Success'
+            msg: 'Posts given'
         });
     }  
 });
@@ -73,13 +70,13 @@ exports.user_login = asyncHandler(async (req, res, next) => {
             .json({ error: true, msg: 'User not found' });
     }
 
-    if (userDetail.email === email || userDetail.password === email) {
+    if (userDetail.email !== email || userDetail.password !== email) {
         return res
             .status(404)
-            .json({ error: true, msg: 'Inalid email or password' });
+            .json({ error: true, msg: 'Invalid email or password' });
     } else {
         const user = { user: userDetail };
-        const token = sign(user, req, res);
+        const token = jwt.sign(user, req, res);
 
         return res.json({
             error: false,
@@ -121,7 +118,7 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     
     await user.save();
     const token = jwt.sign({ user }, process.env.SECRET, {
-        expiresIn: '3d'
+        expiresIn: '1m'
     });
 
     if (user) {

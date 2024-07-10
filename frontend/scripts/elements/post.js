@@ -66,7 +66,7 @@ function givePostForm () {
     });
 
     const create = document.createElement('button');
-    create.addClassList('create');
+    create.classList.add('create');
     const cancel = document.createElement('button');
     cancel.onclick = deletePostForm;
 

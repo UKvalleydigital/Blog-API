@@ -3,13 +3,13 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 require('dotenv').config();
 
 const routes = require('./routes/index');
+const { errorMonitor } = require('events');
 
 const app = express();
 app.use(cors());
@@ -27,6 +27,8 @@ if (process.env.PROCESS_ENV === 'production') {
 async function main(url) {
   mongoose.connect(url);
 }
+
+app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json({
@@ -57,7 +59,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ error: err });
 });
 
 module.exports = app;

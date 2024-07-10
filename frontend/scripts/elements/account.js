@@ -1,21 +1,22 @@
 export default function User () {
-    let userPostList = [];
-    const returnUserPosts = () => userPostList;
+    const getProfileInfo = async () => {
+        const url = 'http://localhost:3000/profile_info/';
+        const response = await fetch(url, { 
+            method: 'POST',
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
 
-    let userEmail = null;
-    const returnEmail = () => userEmail;
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message)
+        }
 
-    const getProfileInfo = () => {
-        const url = 'http://localhost:3000/user_profile_info';
-        fetch(url, { method: 'GET' })
-            .then(res => res.json())
-            .then(res => res.email)
-            .then(email => userEmail = email)
-            .catch(err => console.log(err));
+        const json = await response.json();
+        const email = await json.email;
+        return email;
     };
 
-    const createUserProfile = () => {
-        const email = returnEmail();
+    const createUserProfile = (email) => {
         const container = document.createElement('div');
         const div = document.createElement('div');
 
@@ -25,12 +26,16 @@ export default function User () {
 
         let array = [];
         const p = document.createElement('p');
-        for (let i = 0; i < email.length - 1; i++) {
-            if (email[i] === '@') break;
-            array.push(email[i]);
+        if (email.length > 6) {
+                for (let i = 0; i < email.length; i++) {
+                if (email[i] === '@') break;
+                array.push(email[i]);
+            }
+        } else {
+            array = email.split('');
         }
 
-        let name = array.toString();
+        let name = array.join('');
         p.textContent = name;
 
         container.appendChild(div);
@@ -40,14 +45,23 @@ export default function User () {
         ul.appendChild(container);
     };
 
-    const getUserPosts = () => {
-        const url = 'http://localhost:3000/user_posts'
-        fetch(url, { method: 'GET' })
-            .then(res => res.json())
-            .then(res => res.posts)
-            .then(posts => userPostList.push(posts))
-            .catch(err => console.log(err));
+    const getUserPosts = async () => {
+        const url = 'http://localhost:3000/user_posts/'
+        const response =  await fetch(url, { 
+            method: 'GET',
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message)
+        }
+
+        const json = await response.json();
+        const posts = await json.posts;
+        return posts;
     }
 
-    return { getProfileInfo, returnEmail, createUserProfile, getUserPosts, returnUserPosts };
+    return { getProfileInfo, createUserProfile, getUserPosts };
 }
+
