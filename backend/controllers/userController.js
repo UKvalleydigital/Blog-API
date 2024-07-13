@@ -8,8 +8,7 @@ require('dotenv').config;
 
 exports.user_profile_info = asyncHandler(async (req, res, next) => {
     const user = req.user;
-
-    if (!user) {
+    if (!user.user) {
         res
             .status(404)
             .json({ error: true, msg: 'User not found' });
@@ -25,15 +24,15 @@ exports.user_profile_info = asyncHandler(async (req, res, next) => {
 exports.user_post_list = asyncHandler(async (req, res, next) => {
     const user = req.user;
 
-    if (!user) {
+    if (!user.user) {
         res
         .status(404)
         .json({ error: true, msg: 'User not found' });
     }
     
-    const allPostsByUser = await Post.find({ user: user.id })
+    const allPostsByUser = await Post.find({ user: user.user.id })
     
-    if (!user.blogger) {
+    if (!user.user.blogger) {
         res.json({
             error: false,
             posts: [],
@@ -63,26 +62,30 @@ exports.user_login = asyncHandler(async (req, res, next) => {
             .json({ error: true, msg: 'Password required' });
     } 
 
-    const userDetail = await User.findOne({ email: email });
-    if (!userDetail) {
+    const user = await User.findOne({ email: email });
+    if (!user) {
         return res
             .status(404)
             .json({ error: true, msg: 'User not found' });
     }
 
-    if (userDetail.email !== email || userDetail.password !== email) {
+    const match = await bcrypt.compare(password, user.password);
+
+    if (user.email !== email || !match) {
         return res
             .status(404)
             .json({ error: true, msg: 'Invalid email or password' });
-    } else {
-        const user = { user: userDetail };
-        const token = jwt.sign(user, req, res);
+    }
+    const token = jwt.sign({ user }, process.env.SECRET, {
+        expiresIn: '3m'
+    });
 
+    if (user) {
         return res.json({
             error: false,
-            email,
+            user,
             token,
-            msg: 'Success login'
+            msg: 'Successful login'
         });
     }
 });
@@ -118,7 +121,7 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     
     await user.save();
     const token = jwt.sign({ user }, process.env.SECRET, {
-        expiresIn: '1m'
+        expiresIn: '3m'
     });
 
     if (user) {

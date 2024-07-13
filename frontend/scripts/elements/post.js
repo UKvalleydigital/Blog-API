@@ -28,7 +28,9 @@ function Post () {
     return { createPost, getPosts, returnPosts };
 };
 
-function givePostForm () {
+function givePostForm (e) {
+    e.preventDefault();
+
     const postArray = [
         { name: 'Title', input: 'text' },
         { name: 'Published', input: 'checkbox' },
@@ -81,11 +83,13 @@ function givePostForm () {
     document.body.appendChild(div);
 }
 
-function deletePostForm () {
+function deletePostForm (e) {
+    e.preventDefault();
+
     const add = document.querySelector('#create');
     add.style.visibility = 'visible';
 
-    const div = document.querySelector('form_container');
+    const div = document.querySelector('.form_container');
     div.remove();
 }
 

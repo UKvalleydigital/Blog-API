@@ -46,7 +46,6 @@ User().getProfileInfo()
     .then(userEmail => User().createUserProfile(userEmail))
     .catch(err => console.log(err));
 
-
 // Display form 
 const create = document.querySelector('#create');
 create.onclick = givePostForm;

@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 exports.verify = function(req, res, next) {
     jwt.verify(req.token, process.env.SECRET, (err, authData) => {
