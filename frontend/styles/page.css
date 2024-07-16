@@ -6,7 +6,7 @@ h2 {
     background-color: rgb(235, 235, 235);
     border: 1px solid gainsboro;
     border-radius: 7%;
-    padding: 4px 12px;
+    padding: 4px 16px;
 }
 
 li:hover {

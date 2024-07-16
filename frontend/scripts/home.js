@@ -1,6 +1,8 @@
 import { Post, givePostForm } from './elements/post.js';
 import User from './elements/account.js';
 
+let posts = [];
+
 function createList(list, container, className) {
     if (list.length <=  0) return;
     let ul = null;
@@ -14,7 +16,7 @@ function createList(list, container, className) {
 
     list.forEach(element => {
         const li = document.createElement('li');
-        li.textContent = element;
+        li.textContent = element.title;
         ul.appendChild(li);
     });
 
@@ -30,14 +32,13 @@ function createList(list, container, className) {
 /*--NO ACCOUNT OPERATIONS--*/
 
 // Display posts
-
-Post().getPosts();
-const allPosts = Post().returnPosts();
-allPosts.push('post 4');
-
-createList(allPosts, true, 'post_list');
-
-
+Post().getPosts()
+    .then(allPosts => {
+        posts = allPosts;
+        return posts;
+    })
+    .then(posts => createList(allPosts, true, 'post_list'))
+    .catch(err => console.log(err));
 
 /*--ACCOUNT ONLY OPERATIONS--*/
 
@@ -46,9 +47,19 @@ User().getProfileInfo()
     .then(userEmail => User().createUserProfile(userEmail))
     .catch(err => console.log(err));
 
-// Display form 
+// Display form and create post
 const create = document.querySelector('#create');
-create.onclick = givePostForm;
+create.addEventListener('click', (e) => {
+    givePostForm(e);
+    const form = document.querySelector('.post_form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        Post().createPost()
+            .then(createdPost => posts.push(createdPost))
+            .catch(err => console.log(err));
+    });
+});
 
 // Display personal user posts
 User().getUserPosts()
@@ -65,6 +76,4 @@ User().getUserPosts()
         };
     })
     .catch(err => console.log(err));
-
-
 

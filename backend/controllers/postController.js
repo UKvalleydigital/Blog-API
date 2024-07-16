@@ -13,9 +13,9 @@ exports.post_list = asyncHandler(async (req, res, next) => {
         return res
             .status(404)
             .json({ error: true, msg: 'Posts unavailable' });
-    }
-
-    return res.json({ error: false, allPosts });
+    } 
+    
+    return res.json({ error: false, allPosts: [] });
 });
 
 exports.post_create_post = asyncHandler(async (req, res, next) =>{
@@ -39,7 +39,7 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     }
     
     const createdPost = new Post({
-        user,
+        user: req.user.user,
         comments: typeof comments === 'undefined'
         ? [] : comments,
         title,
@@ -49,8 +49,9 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     });
     
     createdPost.save();
-    verify(req.token, createdPost);
-    return res.json({ error: false, createdPost });
+    if (createdPost) {
+        return res.json({ error: false, createdPost });
+    }
 });
 
 

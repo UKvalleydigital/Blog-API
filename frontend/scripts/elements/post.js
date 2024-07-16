@@ -1,31 +1,47 @@
 function Post () {
-    let postList = [];
-    const returnPosts = () => postList;
+    const createPost = async () => {
+        const comments = [];
+        const title = document.querySelector('#Title').value;
+        const published = document.querySelector('#Published').checked;
+        const text = document.querySelector('#Text').value;
 
-    const createPost = () => {
-        const form = document.querySelector('.post_form');
-        if (!form) return;
+        const data = { comments, title, published, text };
+        const jsonData = JSON.stringify(data);
+        
+        const url = 'http://localhost:3000/post_form';
+        const response = await fetch (url, {
+                method: 'POST',
+                body: jsonData,
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+            
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message)
+        }
 
-        const create = document.querySelector('create');
-        create.addEventListener('submit', (e) =>{
-            e.preventDefault();
-
-            const comments = [];
-        })
-
-        // To be continued...
+        const json = await response.json();
+        const post = await json.createdPost;
+        return post;
     };
 
-    const getPosts = () => {
-        const url = `http://localhost:3000/posts`
-        fetch(url, { method: 'GET', mode: 'cors' })
-            .then(res => res.json())
-            .then(res => res.allPosts)
-            .then(posts => postList.push(posts))
-            .catch(err => console.error(err));
+
+    const getPosts = async () => {
+        const url = 'http://localhost:3000/posts';
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+
+        const json = await response.json();
+        const posts = await json.allPosts;
+        console.log(json, posts);
+        return posts;
     };
 
-    return { createPost, getPosts, returnPosts };
+    return { createPost, getPosts };
 };
 
 function givePostForm (e) {
@@ -44,7 +60,6 @@ function givePostForm (e) {
     div.classList.add('form_container');
 
     const form = document.createElement('form');
-    form.method = 'POST';
     
     postArray.forEach(element => {
         const label = document.createElement('label');
@@ -69,6 +84,7 @@ function givePostForm (e) {
 
     const create = document.createElement('button');
     create.classList.add('create');
+    create.type = 'submit';
     const cancel = document.createElement('button');
     cancel.onclick = deletePostForm;
 
