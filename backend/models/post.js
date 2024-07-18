@@ -10,4 +10,4 @@ const PostSchema = new Schema({
     date_posted: { type: Date, required: true }
 })
 
-module.exports = mongoose.model('Post', PostSchema)
+module.exports = mongoose.model('Post', PostSchema);

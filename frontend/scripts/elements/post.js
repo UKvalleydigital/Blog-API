@@ -19,16 +19,62 @@ function Post () {
             const message = `An error has occured: ${response.status}`;
             throw new Error(message)
         }
-
+        data
         const json = await response.json();
         const post = await json.createdPost;
         return post;
     };
 
+    const findPostID = async (item) => {
+        const title = item[0].textContent;
+        const text = item[1].textContent;
+        
+        const data = { title, text };
+        const jsonData = JSON.stringify(data);
+        
+        const url = `http://localhost:3000/postID`;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: jsonData
+        })
+        
+        const json = await response.json();
+        const id = await json.id;
+
+        return id;
+    };
+
+    const displayPost = async (data) => {
+        const { title, text, comments } = data; 
+
+        const h2 = document.createElement('h2');
+        const p = document.createElement('p');
+        const ul = document.createElement('ul');
+        const div = document.querySelector('post_data');
+
+        h2.textContent = title;
+        p.textContent = text;
+        comments.forEach(comment => {
+            const li = document.createElement('li');
+            li.textContent = comment;
+
+            ul.appendChild(li);
+        });
+
+        div.appendChild(h2);
+        div.appendChild(p);
+        div.appendChild(ul);
+    }
+
+    const updatePost = async () => {
+
+    };
+
+    const deletePost = async () => {};
 
     const getPosts = async () => {
         const url = 'http://localhost:3000/posts';
-        const response = await fetch(url);
+        const response = await fetch(url, { method: 'GET' });
 
         if (!response.ok) {
             const message = `An error has occured: ${response.status}`;
@@ -41,7 +87,8 @@ function Post () {
         return posts;
     };
 
-    return { createPost, getPosts };
+
+    return { createPost, findPostID, updatePost, deletePost, getPosts, displayPost };
 };
 
 function givePostForm (e) {

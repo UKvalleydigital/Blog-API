@@ -1,25 +1,24 @@
 const Post = require('../models/post');
-const verify = require('../config/passport').verify;
 const asyncHandler = require('express-async-handler');
 
 exports.post_list = asyncHandler(async (req, res, next) => {
-    const allPosts = await Post.find({})
+    const allPosts = await Post.find({ published: true })
         .sort({ date_posted: 1 })
         .populate('user')
         .populate('comment')
-        .exec()
+        .exec();
 
     if (!allPosts) {
         return res
-            .status(404)
+            .status(403)
             .json({ error: true, msg: 'Posts unavailable' });
     } 
     
-    return res.json({ error: false, allPosts: [] });
+    return res.json({ error: false, allPosts });
 });
 
-exports.post_create_post = asyncHandler(async (req, res, next) =>{
-    const { comments, title, text } = req.body;
+exports.post_create = asyncHandler(async (req, res, next) =>{
+    const { comments, published, title, text } = req.body;
     
     if (!Array.isArray(comments)) {
         comments = typeof comments === 'undefined'
@@ -28,14 +27,21 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     
     if (!title) {
         return res
-            .status(404)
+            .status(400)
             .json({ error: true, msg: 'Title required' });
     }
 
     if (!text) {
         return res
-            .status(404)
+            .status(400)
             .json({ error: true, msg: 'Content required' });
+    }
+
+    const post = await Post.findOne({ title: title, text: text });
+    if (post) {
+        return res
+            .status(404)
+            .json({ error: true, msg: 'This specific post has already been made' })
     }
     
     const createdPost = new Post({
@@ -43,7 +49,7 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
         comments: typeof comments === 'undefined'
         ? [] : comments,
         title,
-        published: req.body.published,
+        published: published,
         text,
         date_posted: Date.now() 
     });
@@ -54,8 +60,7 @@ exports.post_create_post = asyncHandler(async (req, res, next) =>{
     }
 });
 
-
-exports.postId_update = asyncHandler(async (req, res, next) => {
+exports.post_update = asyncHandler(async (req, res, next) => {
     const comments = req.body.comments;
     
     if (!Array.isArray(comments)) {
@@ -63,7 +68,7 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
         ? [] : [comments];
     }
 
-    const post = Post.findOne(req.params.id);
+    const post = await Post.findById(req.params.id);
     if (!post) {
         return res
         .status(404)
@@ -79,8 +84,8 @@ exports.postId_update = asyncHandler(async (req, res, next) => {
     res.json({ error: false, updatedPost });
 });
 
-exports.postId_delete = asyncHandler(async (req, res, next) => {
-    const post = Post.findOne(req.params.id);
+exports.post_delete = asyncHandler(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
     if (!post) {
         return res
             .status(404)
@@ -93,10 +98,12 @@ exports.postId_delete = asyncHandler(async (req, res, next) => {
 });
 
 exports.postId_get = asyncHandler(async (req, res, next) => {
-    const post = Post.findById(req.params.id)
-    .populate('user')
-    .populate('comment')
-    .exec()
+    const { title, text } = req.body;
+    const post = await Post.findOne({ 
+        title: title, 
+        published: true, 
+        text: text
+    }).exec();
 
     if (!post) {
         return res
@@ -104,5 +111,21 @@ exports.postId_get = asyncHandler(async (req, res, next) => {
             .json({ error: true, msg: 'Post not found' });
     }
 
-    res.json({ error: false, post });
+    res.json({ error: false, id: post._id });
 });
+
+exports.post_get = asyncHandler(async (req, res, next) => {
+    const id = req.body.postID;
+    const post = await Post.findById(id)
+        .populate('user')
+        .populate('commment')
+        .exec();
+
+    if (!post) {
+        return res
+            .status(403)
+            .json({ error: true, msg: 'Post not found' })
+    }
+
+    res.json({ error: false, msg: 'Post found!', post })
+})

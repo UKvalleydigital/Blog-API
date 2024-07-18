@@ -5,12 +5,18 @@ const post_controller = require('../controllers/postController');
 
 router.get('/posts', post_controller.post_list);
 
-router.get('/posts/:postId', post_controller.postId_get);
+router.post('/postID', post_controller.postId_get);
 
-router.post('/post_form', passport.authorize, passport.verify, post_controller.post_create_post);
+router.post('/post_get', post_controller.post_get);
 
-router.put('/posts/:postId', passport.authorize, passport.verify, post_controller.postId_update);
+router.post('/post_form', passport.authorize, passport.verify, post_controller.post_create);
 
-router.delete('/posts/:postId', passport.authorize, passport.verify, post_controller.postId_delete);
+router.put('/post_update', passport.authorize, passport.verify, function (req, res) {
+    post_controller.post_update
+});
+
+router.delete('/posts_delete', passport.authorize, passport.verify, function (req, res) {
+    post_controller.post_delete
+});
 
 module.exports = router;

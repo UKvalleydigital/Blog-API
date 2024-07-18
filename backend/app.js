@@ -9,6 +9,7 @@ const logger = require('morgan');
 require('dotenv').config();
 
 const routes = require('./routes/index');
+const { errorMonitor } = require('events');
 
 const app = express();
 app.use(cors());
