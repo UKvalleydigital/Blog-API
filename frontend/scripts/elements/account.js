@@ -6,12 +6,12 @@ export default function User () {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
-        if (!response.ok) {
-            const message = `An error has occured: ${response.status}`;
-            throw new Error(message)
+        const json = await response.json();
+
+        if (json.error) {
+            console.log(response);
         }
 
-        const json = await response.json();
         const email = await json.email;
         return email;
     };

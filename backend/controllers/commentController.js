@@ -2,23 +2,8 @@ const Comment = require('../models/comment');
 const verify = require('../config/passport');
 const asyncHandler = require('express-async-handler');
 
-exports.comment_list = asyncHandler(async (req, res, next) => {
-    const allComments = await Comment.find({})
-        .sort({ date_posted: 1 })
-        .populate('user')
-        .exec()
-
-    if (!allComments) {
-        return res
-            .status(404)
-            .json({ error: true, msg: 'Comments unavailable' })
-    }
-
-    res.json({ error: false, allComments });
-});
-
 exports.comment_create_post = asyncHandler(async (req, res, next) => {
-    const { user, text, date_posted } = req.body;
+    const { user, text } = req.body;
     if (!text) {
         return res
             .status(404)
@@ -28,11 +13,10 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
     const createdComment = new Comment({
         user,
         text,
-        date_posted
+        date_posted: Date.now()
     });
 
     createdComment.save();
-    verify(req.token, createdComment);
     res.json({ error: false, createdComment });
 });
 

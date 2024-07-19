@@ -14,13 +14,13 @@ function Post () {
                 body: jsonData,
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
-            
-        if (!response.ok) {
-            const message = `An error has occured: ${response.status}`;
-            throw new Error(message)
-        }
-        data
+
         const json = await response.json();
+
+        if (json.error) {
+            console.log(response);
+        }
+
         const post = await json.createdPost;
         return post;
     };
@@ -44,28 +44,6 @@ function Post () {
         return id;
     };
 
-    const displayPost = async (data) => {
-        const { title, text, comments } = data; 
-
-        const h2 = document.createElement('h2');
-        const p = document.createElement('p');
-        const ul = document.createElement('ul');
-        const div = document.querySelector('post_data');
-
-        h2.textContent = title;
-        p.textContent = text;
-        comments.forEach(comment => {
-            const li = document.createElement('li');
-            li.textContent = comment;
-
-            ul.appendChild(li);
-        });
-
-        div.appendChild(h2);
-        div.appendChild(p);
-        div.appendChild(ul);
-    }
-
     const updatePost = async () => {
 
     };
@@ -75,20 +53,18 @@ function Post () {
     const getPosts = async () => {
         const url = 'http://localhost:3000/posts';
         const response = await fetch(url, { method: 'GET' });
+        const json = await response.json();
 
-        if (!response.ok) {
-            const message = `An error has occured: ${response.status}`;
-            throw new Error(message);
+        if (json.error) {
+            console.log(response);
         }
 
-        const json = await response.json();
         const posts = await json.allPosts;
-        console.log(json, posts);
         return posts;
     };
 
 
-    return { createPost, findPostID, updatePost, deletePost, getPosts, displayPost };
+    return { createPost, findPostID, updatePost, deletePost, getPosts };
 };
 
 function givePostForm (e) {

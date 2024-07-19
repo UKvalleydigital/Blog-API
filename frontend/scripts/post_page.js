@@ -9,19 +9,22 @@ async function getPostData (id) {
         body: jsonData
     })
         .then(res => res.json())
-        .then(json => console.log(json))
-        // .then(json => json.post)
-        // .then(post => createPage(post))
+        .then(json => json.post)
+        .then(post => createPage(post))
         .catch(err => console.log(err));
 };
 
 function createPage (data) {
-    console.log(data);
     const h2 = document.createElement('h2');
     const p1 = document.createElement('p');
     const p2 = document.createElement('p')
     const ul = document.createElement('ul');
     const div = document.querySelector('.post_data');
+
+    if (!data) {
+        p1.textContent = 'Post not available';
+        div.appendChild(p1);
+    }
 
     ul.classList.add('.comment_data');
     p1.classList.add('.user');
@@ -43,13 +46,4 @@ function createPage (data) {
 
 const postID = localStorage.getItem('postID')
 
-// getPostData(postID)
-createPage({
-    title: 'Me',
-    text: 'Hey there, looking handsome',
-    comments: [],
-    user: {
-        email: 't@t',
-        id: 'CLASSIFIED'
-    }
-})
+getPostData(postID)
