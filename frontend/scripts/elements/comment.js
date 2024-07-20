@@ -35,7 +35,7 @@ export default function Comment () {
 
         const createdComment = json.createComment;
         if (createdComment) {
-            return;
+            return createComment;
         } else {
             return { msg: 'Server connected, failure in frontend' }
         }

@@ -30,9 +30,9 @@ exports.user_post_list = asyncHandler(async (req, res, next) => {
         .json({ error: true, msg: 'User not found' });
     }
     
-    const allPostsByUser = await Post.find({ user: user.user.id })
+    const allPostsByUser = await Post.find({ user: user.user._id }).exec();
     
-    if (!user.user.blogger) {
+    if (allPostsByUser.length === 0) {
         res.json({
             error: false,
             posts: [],

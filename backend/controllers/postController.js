@@ -2,19 +2,15 @@ const Post = require('../models/post');
 const asyncHandler = require('express-async-handler');
 
 exports.post_list = asyncHandler(async (req, res, next) => {
-    const allPosts = await Post.find({ published: true })
-        .sort({ date_posted: 1 })
-        .populate('user')
-        .populate('comment')
-        .exec();
+    const allPosts = await Post.find({ published: true }).exec();
 
     if (!allPosts) {
-        return res
+        res
             .status(403)
             .json({ error: true, msg: 'Posts unavailable' });
     } 
     
-    return res.json({ error: false, allPosts });
+    res.json({ error: false, allPosts });
 });
 
 exports.post_create = asyncHandler(async (req, res, next) =>{
@@ -43,6 +39,7 @@ exports.post_create = asyncHandler(async (req, res, next) =>{
             .status(404)
             .json({ error: true, msg: 'This specific post has already been made' })
     }
+
     
     const createdPost = new Post({
         user: req.user.user,
@@ -55,6 +52,10 @@ exports.post_create = asyncHandler(async (req, res, next) =>{
     });
     
     createdPost.save();
+    
+    const user = req.user;
+    user.user.posts.push(createdPost);
+
     if (createdPost) {
         return res.json({ error: false, createdPost });
     }

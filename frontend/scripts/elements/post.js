@@ -22,7 +22,7 @@ function Post () {
         }
 
         const post = await json.createdPost;
-        return post;
+        return json;
     };
 
     const findPostID = async (item) => {
