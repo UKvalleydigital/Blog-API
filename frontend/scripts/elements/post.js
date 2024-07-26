@@ -21,7 +21,7 @@ function Post () {
             console.log(response);
         }
 
-        const post = await json.createdPost;
+        // const post = await json.createdPost;
         return json;
     };
 

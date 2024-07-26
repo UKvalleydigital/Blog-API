@@ -5,21 +5,25 @@ function createList(list, container, className) {
     const DOMList = (ul, list) => {
         list.forEach(element => {
             const li = document.createElement('li');
+            
             const h3 = document.createElement('h3');
             h3.textContent = element.title;
-
+            
             const p = document.createElement('p');
             p.textContent = element.text;
-
+            
             li.appendChild(h3);
             li.appendChild(p);
+
+            li.onclick = () => {displayPostData(li)};
+
             ul.appendChild(li);
         })
     }
     if (!container) {
         const ul = document.createElement('ul');
         ul.classList.add(className);
-
+        
         const div = document.querySelector('.lists');
         let current = document.querySelector('.recent');
         DOMList(ul, list);
@@ -37,21 +41,19 @@ function createList(list, container, className) {
 // Display post list
 Post().getPosts()
     .then(allPosts => {
-        createList(allPosts, true, 'post_list');
+        createList(allPosts, true, 'post_list')
     })
     .catch(err => console.log(err));
 
 // Save post data
-const titles = document.querySelectorAll('.post_list > li');
-
-titles.forEach(title => title.onclick = () => {
+function displayPostData (title) {
     Post().findPostID(title.children)
         .then(id => {
             localStorage.setItem('postID', id)
             window.location.href = 'post_page.html';
         })
         .catch(err => console.log(err));
-});
+};
 
 
 
@@ -70,7 +72,7 @@ create && create.addEventListener('click', (e) => {
     const form = document.querySelector('.post_form');
     form.addEventListener('submit', () => {
         Post().createPost()
-            .then(res => console.log(res))
+            .then(post => console.log(post))
             .catch(err => console.log(err));
     });
 });

@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const User = require('../models/user');
 const asyncHandler = require('express-async-handler');
 
 exports.post_list = asyncHandler(async (req, res, next) => {
@@ -41,6 +42,7 @@ exports.post_create = asyncHandler(async (req, res, next) =>{
     }
 
     
+    const user = req.user;
     const createdPost = new Post({
         user: req.user.user,
         comments: typeof comments === 'undefined'
@@ -53,11 +55,11 @@ exports.post_create = asyncHandler(async (req, res, next) =>{
     
     createdPost.save();
     
-    const user = req.user;
-    user.user.posts.push(createdPost);
+    const updatedUser = await User.findByIdAndUpdate(user.user._id,
+        { $push: { posts: createdPost } }, {});
 
-    if (createdPost) {
-        return res.json({ error: false, createdPost });
+    if (createdPost && updatedUser) {
+        res.json({ error: false, createdPost });
     }
 });
 
@@ -117,10 +119,7 @@ exports.postId_get = asyncHandler(async (req, res, next) => {
 
 exports.post_get = asyncHandler(async (req, res, next) => {
     const id = req.body.postID;
-    const post = await Post.findById(id)
-        .populate('user')
-        .populate('commment')
-        .exec();
+    const post = await Post.findById(id).exec();
 
     if (!post) {
         return res

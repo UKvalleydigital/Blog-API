@@ -18,27 +18,20 @@ export default function Comment () {
         return post.comments;
     };
 
-    const createComment = async () => {
+    const createComment = async (post) => {
         const url = `http://localhost:3000/comment_form`;
-        const text = document.querySelector('#Text').value;
+        const text = document.querySelector('#comment').value;
 
         const response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify({ text }),
+            body: JSON.stringify({ post, text }),
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
         const json = await response.json();
-        if (json.error) {
-            console.log(json);
-        }
+        console.log(json);
 
-        const createdComment = json.createComment;
-        if (createdComment) {
-            return createComment;
-        } else {
-            return { msg: 'Server connected, failure in frontend' }
-        }
+        // const createdComment = json.createdComment;
     };
 
     const updateComment = async () => {

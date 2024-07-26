@@ -3,7 +3,9 @@ const verify = require('../config/passport');
 const asyncHandler = require('express-async-handler');
 
 exports.comment_create_post = asyncHandler(async (req, res, next) => {
-    const { user, text } = req.body;
+    const { post, text,  } = req.body;
+    const user = req.user;
+
     if (!text) {
         return res
             .status(404)
@@ -11,12 +13,14 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
     }
 
     const createdComment = new Comment({
-        user,
+        user: user.user,
+        post,
         text,
         date_posted: Date.now()
     });
 
     createdComment.save();
+    post.comments.push(createdComment);
     res.json({ error: false, createdComment });
 });
 
