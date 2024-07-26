@@ -1,21 +1,17 @@
 export default function Comment () {
     const getComments = async (postID) => {
-        const data = { id: postID };
-        const url = `http://localhost:3000/post_get`;
+        const data = { postID };
+        const url = `http://localhost:3000/comments_post`;
 
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(data)
-        })
+        });
 
         const json = await response.json();
+        const comments = await json.postComments;
 
-        if (json.error) {
-            console.log(json);
-        }
-
-        const post = await json.post;
-        return post.comments;
+        return comments;
     };
 
     const createComment = async (post) => {
@@ -30,8 +26,6 @@ export default function Comment () {
 
         const json = await response.json();
         console.log(json);
-
-        // const createdComment = json.createdComment;
     };
 
     const updateComment = async () => {

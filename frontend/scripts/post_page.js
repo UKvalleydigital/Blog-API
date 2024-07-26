@@ -17,20 +17,13 @@ async function getPostData (id) {
 };
 
 // Create page with post data
-function createPage (data) {
-    const comments = [{
-        text: 'Hey there, what a nice post!'
-    },
-    {
-        text: 'This is so bad LOL'
-    }];
+function createPage (data, comments) {
 
     const h2 = document.createElement('h2');
     const p1 = document.createElement('p');
     const p2 = document.createElement('p')
     const ul = document.createElement('ul');
     const div = document.querySelector('.post_data');
-    const container = document.querySelector('.content');
 
     if (!data) {
         p1.textContent = 'Post not available';
@@ -67,7 +60,13 @@ function createPage (data) {
 const postID = localStorage.getItem('postID')
 
 getPostData(postID)
-    .then(post => createPage(post))
+    .then(post => {
+        if (post.comments.length > 0) {
+            Comment().getComments(postID)
+                .then(comments => createPage(post, comments))
+                .catch(err => console.log(err))
+        }
+    })
     .catch(err => console.log(err))
 
 
@@ -78,7 +77,11 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     getPostData(postID)
-        .then(post => Comment().createComment(post))
+        .then(post => {
+            Comment().createComment(post);
+            e.target.submit();
+        })
         .catch(err => console.log(err))
+
 });
 
