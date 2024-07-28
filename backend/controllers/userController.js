@@ -10,7 +10,7 @@ exports.user_profile_info = asyncHandler(async (req, res, next) => {
     const user = req.user;
     if (!user.user) {
         res
-            .status(404)
+            .status(403)
             .json({ error: true, msg: 'User not found' });
     } else {
         res.json({ 
@@ -19,6 +19,19 @@ exports.user_profile_info = asyncHandler(async (req, res, next) => {
             msg: 'Profile created'
         });
     } 
+});
+
+exports.userID_get = asyncHandler(async (req, res, next) => {
+    const userID = req.body.id;
+    const user = await User.findById(userID).exec();
+
+    if (!user) {
+        return res
+            .status(403)
+            .json({ error: true, msg: 'User not found' });
+    }
+
+    res.json({ error: false, user });
 });
  
 exports.user_post_list = asyncHandler(async (req, res, next) => {
@@ -76,8 +89,9 @@ exports.user_login = asyncHandler(async (req, res, next) => {
             .status(404)
             .json({ error: true, msg: 'Invalid email or password' });
     }
+
     const token = jwt.sign({ user }, process.env.SECRET, {
-        expiresIn: '3m'
+        expiresIn: '10m'
     });
 
     if (user) {
@@ -121,7 +135,7 @@ exports.user_register = asyncHandler(async (req, res, next) => {
     
     await user.save();
     const token = jwt.sign({ user }, process.env.SECRET, {
-        expiresIn: '3m'
+        expiresIn: '10m'
     });
 
     if (user) {

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../styles/default.css">
     <link rel="stylesheet" href="../../styles/post.css">
     <title>Post</title>
@@ -18,11 +19,14 @@
     <div class="content">
         <div class="post_data"></div>
         <div class="comment_data">
+            <h2>Comments</h2>
             <form class="comment_form">
-                <textarea id="comment" cols="30" rows="5"></textarea>
+                <textarea id="comment" cols="90" rows="5"></textarea>
                 <button type="submit">Comment</button>
             </form>
         </div>
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
     </div>
 </body>
 <script type="module" src="../../scripts/post_page.js"></script>

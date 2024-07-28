@@ -16,6 +16,23 @@ export default function User () {
         return email;
     };
 
+    const getUser = async (id) => {
+        const url = 'http://localhost:3000/user_get';
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({ id })
+        })
+
+        const json = await response.json();
+
+        if (json.error) {
+            console.log(json);
+        }
+
+        const user = await json.user;
+        return user;
+    }
+
     const createUserProfile = (email) => {
         const container = document.createElement('div');
         const div = document.createElement('div');
@@ -62,6 +79,6 @@ export default function User () {
         return posts;
     }
 
-    return { getProfileInfo, createUserProfile, getUserPosts };
+    return { getProfileInfo, getUser, createUserProfile, getUserPosts };
 }
 

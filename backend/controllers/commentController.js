@@ -22,6 +22,7 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
     });
 
     createdComment.save();
+    
     Post.findByIdAndUpdate(post._id, { $push: { comments: createdComment } });
     User.findByIdAndUpdate(user.user._id, { $push: { comments: createdComment } });
 

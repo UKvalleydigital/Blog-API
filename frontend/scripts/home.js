@@ -49,6 +49,7 @@ Post().getPosts()
 function displayPostData (title) {
     Post().findPostID(title.children)
         .then(id => {
+            localStorage.removeItem('postID');
             localStorage.setItem('postID', id)
             window.location.href = 'post_page.html';
         })
