@@ -24,7 +24,7 @@ async function getPostData (id) {
 };
 
 // Create comment function
-function createPageComment(comment, ul) {
+function createPageComments(comment, ul) {
     User().getUser(comment.user)
         .then(user => {
             const li = document.createElement('li');
@@ -36,7 +36,9 @@ function createPageComment(comment, ul) {
             div2.classList.add('icon');
 
             const editIcon = document.createElement('i');
+            editIcon.onclick = (e) => editComment(e.target, comment);
             const deleteIcon = document.createElement('i');
+            deleteIcon.id = 'deleteIcon';
 
             editIcon.classList.add('fa');
             editIcon.classList.add('fa-pencil-square-o');
@@ -95,10 +97,9 @@ function createPage (data, comments) {
     } else {
         // Loop through and display each comment
         comments.forEach(comment => {
-            createPageComment(comment, ul2);
+            createPageComments(comment, ul2);
         });
     }
-
 };
 
 const postID = localStorage.getItem('postID');
@@ -126,4 +127,53 @@ form.addEventListener('submit', (e) => {
         })
         .catch(err => console.log(err))
 });
+
+// Edit comment function
+function editComment(data, comment) {
+    const commentElement = data
+        .parentElement
+        .parentElement
+        .parentElement
+
+
+    const text = commentElement.childNodes[0].wholeText;
+    const container = commentElement.childNodes[1].outerHTML.toString();
+    commentElement.innerHTML = 
+    `<form class="textComment_form">
+        <textarea class="text">${text}</textarea>
+        <button type="submit" class="edit">Edit</button>
+        <button class="cancel">Cancel</button>
+    </form>${container}`;
+
+
+    const cancel = document.querySelector('.cancel');
+    cancel.onclick = () => {
+        window.location.href = `post_page.html`;
+    }
+
+    const form = document.querySelector('.textComment_form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        Comment().updateComment(document.querySelector('.text').value, comment._id, postID)
+            .then(() => e.target.submit())
+            .catch(err => {
+                if ((err.status === 403) && document.querySelector('.one')) {
+                    return;
+                }
+
+                const span = document.createElement('span');
+                span.style.color = 'red';
+                span.classList.add('one');
+
+                if (err.status === 403) {
+                    span.textContent = 'Something went wrong';
+                    commentElement.appendChild(span);
+                } else {
+                    span.textContent = 'Not authorised: you cannot edit this comment';
+                    commentElement.appendChild(span);
+                }
+            });
+    });
+}
 

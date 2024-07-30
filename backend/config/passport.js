@@ -4,7 +4,7 @@ exports.verify = function(req, res, next) {
     jwt.verify(req.token, process.env.SECRET, (err, authData) => {
         if (err) {
             return res
-                .sendStatus(404)
+                .sendStatus(403)
                 .json({ msg: 'Verify token failed', token })
         } else {
             req.user = authData;

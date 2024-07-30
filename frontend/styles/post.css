@@ -33,6 +33,10 @@
     gap: 8px;
 }
 
+i:hover {
+    opacity: 0.5;
+}
+
 button {
     color: white;
     background-color: rgb(51, 145, 233);

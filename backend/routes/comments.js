@@ -7,7 +7,7 @@ router.post('/comment_form',passport.authorize, passport.verify, comment_control
 
 router.post('/comments_post', comment_controller.comments_post);
 
-router.put('/comments_update',passport.authorize, passport.verify, comment_controller.commentId_update);
+router.put('/comment_update',passport.authorize, passport.verify, comment_controller.commentId_update);
 
 router.delete('/comment_delete', passport.authorize, passport.verify, comment_controller.commentId_delete);
 

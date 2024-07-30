@@ -23,25 +23,25 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
 
     createdComment.save();
     
-    Post.findByIdAndUpdate(post._id, { $push: { comments: createdComment } });
+    Post.findByIdAndUpdate(post._id, { $set: { comments: createdComment } });
     User.findByIdAndUpdate(user.user._id, { $push: { comments: createdComment } });
 
     res.json({ error: false, createdComment });
 });
 
 exports.commentId_update = asyncHandler(async (req, res, next) => {
-    const comment = Comment.findOne(req.params.id);
-    if (!comment) {
+    const { text, commentID } = req.body;
+    const user = req.user;
+    
+    const updatedComment = await Comment.findByIdAndUpdate(commentID, { text });
+    
+    if (!updatedComment) {
         return res
             .status(404)
             .json({ error: true, msg:'Comment not found' })
     }
-    
-    const updatedComment = await Comment.findByIdAndUpdate(req.params.id);
 
-    updatedComment.save();
-    verify(req.token, updatedComment);
-    res.json({ error: false, updatedComment });
+    res.json({ error: false, updatedComment, user });
 });
 
 exports.commentId_delete = asyncHandler(async (req, res, next) => {
