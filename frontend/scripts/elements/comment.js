@@ -28,12 +28,12 @@ export default function Comment () {
         console.log(json);
     };
 
-    const updateComment = async (text, commentID, postID) => {
+    const updateComment = async (commentID) => {
         const url = `http://localhost:3000/comment_update/`;
 
         const response = await fetch(url, {
             method: 'PUT',
-            body: JSON.stringify({ text, commentID, postID }),
+            body: JSON.stringify({ commentID }),
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
 
@@ -45,11 +45,12 @@ export default function Comment () {
         return json;
     };
 
-    const deleteComment = async () => {
+    const deleteComment = async (commentID) => {
         const url = `http://localhost:3000/comment_delete`;
 
         const response = await fetch(url, {
             method: 'DELETE',
+            body: JSON.stringify({ commentID }),
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
 
@@ -58,12 +59,7 @@ export default function Comment () {
             console.log(json);
         }
 
-        const deletedComment = json.deletedComment;
-        if (deletedComment) {
-            return;
-        } else {
-            return { msg: 'Server connected, failure in frontend' }
-        }
+        return json;
     };
 
     return { getComments, createComment, updateComment, deleteComment };

@@ -24,7 +24,7 @@ async function getPostData (id) {
 };
 
 // Create comment function
-function createPageComments(comment, ul) {
+function createPageComment(comment, ul) {
     User().getUser(comment.user)
         .then(user => {
             const li = document.createElement('li');
@@ -36,15 +36,15 @@ function createPageComments(comment, ul) {
             div2.classList.add('icon');
 
             const editIcon = document.createElement('i');
-            editIcon.onclick = (e) => editComment(e.target, comment);
             const deleteIcon = document.createElement('i');
-            deleteIcon.id = 'deleteIcon';
-
+            
             editIcon.classList.add('fa');
             editIcon.classList.add('fa-pencil-square-o');
+            editIcon.onclick = (e) => editComment(e.target, comment);
             
             deleteIcon.classList.add('fa');
             deleteIcon.classList.add('fa-trash');
+            deleteIcon.onclick = (e) => deleteComment(comment);
 
             const h4 = document.createElement('h4');
             h4.textContent = `Commented by ${user.email}`;
@@ -97,7 +97,7 @@ function createPage (data, comments) {
     } else {
         // Loop through and display each comment
         comments.forEach(comment => {
-            createPageComments(comment, ul2);
+            createPageComment(comment, ul2);
         });
     }
 };
@@ -133,8 +133,7 @@ function editComment(data, comment) {
     const commentElement = data
         .parentElement
         .parentElement
-        .parentElement
-
+        .parentElement;
 
     const text = commentElement.childNodes[0].wholeText;
     const container = commentElement.childNodes[1].outerHTML.toString();
@@ -145,7 +144,6 @@ function editComment(data, comment) {
         <button class="cancel">Cancel</button>
     </form>${container}`;
 
-
     const cancel = document.querySelector('.cancel');
     cancel.onclick = () => {
         window.location.href = `post_page.html`;
@@ -155,7 +153,7 @@ function editComment(data, comment) {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        Comment().updateComment(document.querySelector('.text').value, comment._id, postID)
+        Comment().updateComment(comment._id)
             .then(() => e.target.submit())
             .catch(err => {
                 if ((err.status === 403) && document.querySelector('.one')) {
@@ -175,5 +173,13 @@ function editComment(data, comment) {
                 }
             });
     });
+}
+
+// Delete comment function
+
+function deleteComment(comment) {
+    Comment().deleteComment(comment._id, postID)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
 }
 
