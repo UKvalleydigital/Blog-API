@@ -9,7 +9,7 @@ export default function User () {
         const json = await response.json();
 
         if (json.error) {
-            console.log(response);
+            throw new Error(json.msg);
         }
 
         const email = await json.email;
@@ -26,7 +26,7 @@ export default function User () {
         const json = await response.json();
 
         if (json.error) {
-            console.log(json);
+            throw new Error(json.msg);
         }
 
         const user = await json.user;
@@ -68,13 +68,12 @@ export default function User () {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
-
-        if (!response.ok) {
-            const message = `An error has occured: ${response.status}`;
-            throw new Error(message)
+        
+        const json = await response.json();
+        if (json.error) {
+            throw new Error(json.msg);
         }
 
-        const json = await response.json();
         const posts = await json.posts;
         return posts;
     }

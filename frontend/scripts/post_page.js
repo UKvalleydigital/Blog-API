@@ -19,48 +19,56 @@ async function getPostData (id) {
     })
     
     const json = await response.json();
+    if (json.error) {
+        throw new Error(json.msg);
+    }
+
     const post = await json.post;
     return post;
 };
 
 // Create comment function
 function createPageComment(comment, ul) {
+    function showCommentContent(user) {
+        const li = document.createElement('li');
+        li.textContent = comment.text;
+
+        const div1 = document.createElement('div');
+        const div2 = document.createElement('div');
+        div1.classList.add('comment_container');
+        div2.classList.add('icon');
+
+        const editIcon = document.createElement('i');
+        const deleteIcon = document.createElement('i');
+        
+        editIcon.classList.add('fa');
+        editIcon.classList.add('fa-pencil-square-o');
+        editIcon.onclick = (e) => editComment(e.target, comment);
+        
+        deleteIcon.classList.add('fa');
+        deleteIcon.classList.add('fa-trash');
+        deleteIcon.onclick = (e) => deleteComment(e.target, comment);
+
+        const h4 = document.createElement('h4');
+        Boolean(user).valueOf() === true 
+            ? h4.textContent = `Commented by ${user.email}`
+            : h4.textContent = `Commented by an unknown user`;
+        div1.appendChild(h4);
+        div2.appendChild(editIcon);
+        div2.appendChild(deleteIcon);
+        div1.appendChild(div2);
+
+        li.classList.add('comment');
+        li.appendChild(div1);
+        const section = document.querySelector('.comment_data');
+        
+        ul.appendChild(li);
+        section.appendChild(ul);
+    }
+
     User().getUser(comment.user)
-        .then(user => {
-            const li = document.createElement('li');
-            li.textContent = comment.text;
-
-            const div1 = document.createElement('div');
-            const div2 = document.createElement('div');
-            div1.classList.add('comment_container');
-            div2.classList.add('icon');
-
-            const editIcon = document.createElement('i');
-            const deleteIcon = document.createElement('i');
-            
-            editIcon.classList.add('fa');
-            editIcon.classList.add('fa-pencil-square-o');
-            editIcon.onclick = (e) => editComment(e.target, comment);
-            
-            deleteIcon.classList.add('fa');
-            deleteIcon.classList.add('fa-trash');
-            deleteIcon.onclick = (e) => deleteComment(comment);
-
-            const h4 = document.createElement('h4');
-            h4.textContent = `Commented by ${user.email}`;
-            div1.appendChild(h4);
-            div2.appendChild(editIcon);
-            div2.appendChild(deleteIcon);
-            div1.appendChild(div2);
-
-            li.classList.add('comment');
-            li.appendChild(div1);
-            const section = document.querySelector('.comment_data');
-            
-            ul.appendChild(li);
-            section.appendChild(ul);
-        })
-        .catch(err => console.log(err))
+        .then(user => showCommentContent(user))
+        .catch(() => showCommentContent(null));
 }
 
 // Create page with post data
@@ -107,13 +115,12 @@ const postID = localStorage.getItem('postID');
 // Get post data
 getPostData(postID)
     .then(post => {
-        if (post.comments.length >= 0) {
-            Comment().getComments(postID)
-                .then(comments => createPage(post, comments))
-                .catch(err => console.log(err))
-        }
+        Comment().getComments(postID)
+            .then(comments => createPage(post, comments))
+            .catch(err => console.log(err))
+
     })
-    .catch(err => console.log(err))
+    .catch(() => createPage(post, comments))
 
 // Get post comments
 const form = document.querySelector('form');
@@ -155,31 +162,44 @@ function editComment(data, comment) {
 
         Comment().updateComment(comment._id)
             .then(() => e.target.submit())
-            .catch(err => {
-                if ((err.status === 403) && document.querySelector('.one')) {
+            .catch(() => {
+                let value = Boolean(document.querySelector('.one')).valueOf();
+                if (value) {
                     return;
                 }
 
                 const span = document.createElement('span');
                 span.style.color = 'red';
                 span.classList.add('one');
+                span.textContent = 'Not authorised: you are not the owner of this comment';
 
-                if (err.status === 403) {
-                    span.textContent = 'Something went wrong';
-                    commentElement.appendChild(span);
-                } else {
-                    span.textContent = 'Not authorised: you cannot edit this comment';
-                    commentElement.appendChild(span);
-                }
+                commentElement.appendChild(span);  
             });
     });
 }
 
 // Delete comment function
 
-function deleteComment(comment) {
+function deleteComment(data, comment) {
+    const commentElement = data
+        .parentElement
+        .parentElement
+        .parentElement;
+
     Comment().deleteComment(comment._id, postID)
         .then(res => console.log(res))
-        .catch(err => console.log(err))
+        .catch(() => {
+            let value = Boolean(document.querySelector('.one')).valueOf();
+            if (value) {
+                return;
+            }
+
+            const span = document.createElement('span');
+            span.style.color = 'red';
+            span.classList.add('one');
+            span.textContent = 'Not authorised: you are not the owner of this comment';
+
+            commentElement.appendChild(span);        
+        });
 }
 

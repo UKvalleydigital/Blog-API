@@ -9,8 +9,11 @@ export default function Comment () {
         });
 
         const json = await response.json();
-        const comments = await json.postComments;
+        if (json.error) {
+            throw new Error(json.msg);
+        }
 
+        const comments = await json.postComments;
         return comments;
     };
 
@@ -25,6 +28,9 @@ export default function Comment () {
         });
 
         const json = await response.json();
+        if (json.error) {
+            throw new Error(json.msg);
+        }
         console.log(json);
     };
 
@@ -39,24 +45,24 @@ export default function Comment () {
 
         const json = await response.json();
         if (json.error) {
-            console.log(json);
+            throw new Error(json.msg);
         }
 
         return json;
     };
 
-    const deleteComment = async (commentID) => {
+    const deleteComment = async (commentID, postID) => {
         const url = `http://localhost:3000/comment_delete`;
 
         const response = await fetch(url, {
             method: 'DELETE',
-            body: JSON.stringify({ commentID }),
+            body: JSON.stringify({ commentID, postID }),
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
-
+        
         const json = await response.json();
         if (json.error) {
-            console.log(json);
+            throw new Error(json.msg);
         }
 
         return json;

@@ -23,14 +23,14 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
 
     createdComment.save();
     
-    Post.findByIdAndUpdate(post._id, { $set: { comments: createdComment } });
+    Post.findByIdAndUpdate(post._id, { $push: { comments: createdComment } });
     User.findByIdAndUpdate(user.user._id, { $push: { comments: createdComment } });
 
     res.json({ error: false, createdComment });
 });
 
 exports.commentId_update = asyncHandler(async (req, res, next) => {
-    const { text, commentID } = req.body;
+    const commentID = req.body.commentID;
     const user = req.user;
     
     const updatedComment = await Comment.findByIdAndUpdate(commentID, { text });
@@ -45,16 +45,20 @@ exports.commentId_update = asyncHandler(async (req, res, next) => {
 });
 
 exports.commentId_delete = asyncHandler(async (req, res, next) => {
-    const comment = Comment.findOne(req.params.id);
-    if (!comment) {
+    const { commentID, postID } = req.body;
+    const user = req.user;
+
+    const deletedComment = await Comment.findByIdAndDelete(commentID);
+
+    if (!deletedComment) {
         return res
             .status(404)
             .json({ error: true, msg:'Comment not found' })
     }
 
-    const deletedComment = await Comment.findByIdAndDelete(req.params.id);
+    User.findByIdAndUpdate(user.user._id, { $pull: { comments: deletedComment } });
+    Post.findByIdAndUpdate(postID, { $pull: { comments: deletedComment } })
 
-    verify(req.token, deletedComment);
     res.json({ error: false, deletedComment });
 });
 

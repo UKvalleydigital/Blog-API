@@ -10,7 +10,7 @@ router.post('/login', user_controller.user_login);
 
 router.post('/user_get', user_controller.userID_get);
 
-router.post('/profile_info', passport.authorize, passport.verify, user_controller.user_profile_info);
+router.post('/profile_info', passport.authorize);
 
 router.get('/user_posts', passport.authorize, passport.verify, user_controller.user_post_list);
 

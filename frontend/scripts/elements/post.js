@@ -18,10 +18,9 @@ function Post () {
         const json = await response.json();
 
         if (json.error) {
-            console.log(response);
+            throw new Error(json.msg);
         }
-
-        // const post = await json.createdPost;
+        
         return json;
     };
 
@@ -39,8 +38,11 @@ function Post () {
         })
         
         const json = await response.json();
-        const id = await json.id;
+        if (json.error) {
+            throw new Error(json.msg);
+        }
 
+        const id = await json.id;
         return id;
     };
 
@@ -53,10 +55,10 @@ function Post () {
     const getPosts = async () => {
         const url = 'http://localhost:3000/posts';
         const response = await fetch(url, { method: 'GET' });
-        const json = await response.json();
 
+        const json = await response.json();
         if (json.error) {
-            console.log(response);
+            throw new Error(json.msg);
         }
 
         const posts = await json.allPosts;
