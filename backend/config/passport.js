@@ -18,13 +18,11 @@ exports.authorize = function(req, res, next) {
     if (bearer) {
         const bearerArray = bearer.split(' ');
         const token = bearerArray[1];
-        if (token) {
-            req.token = token;
-            next();
-        } 
-    } 
-
-    res
-        .status(403)
-        .json({ msg: 'Not authorised', error: true });
+        req.token = token;
+        next()
+    } else {
+        res
+            .status(403)
+            .json({ msg: 'Not authorised', error: true });
+    }
 };

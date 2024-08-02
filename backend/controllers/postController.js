@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 const asyncHandler = require('express-async-handler');
 
 exports.post_list = asyncHandler(async (req, res, next) => {
@@ -7,7 +8,7 @@ exports.post_list = asyncHandler(async (req, res, next) => {
 
     if (!allPosts) {
         res
-            .status(403)
+            .status(404)
             .json({ error: true, msg: 'Posts unavailable' });
     } 
     
@@ -64,38 +65,36 @@ exports.post_create = asyncHandler(async (req, res, next) =>{
 });
 
 exports.post_update = asyncHandler(async (req, res, next) => {
-    const comments = req.body.comments;
-    
-    if (!Array.isArray(comments)) {
-        comments = typeof comments === 'undefined'
-        ? [] : [comments];
+    const { postID, title, published, text } = req.body;
+    const updatedPost = await Post.findByIdAndUpdate(postID, {
+        title,
+        published,
+        text
+    });
+
+    if (!updatedPost) {
+        res
+            .status(404)
+            .json({ error: true, msg: 'Post not found' })
     }
 
-    const post = await Post.findById(req.params.id);
-    if (!post) {
-        return res
-        .status(404)
-        .json({ error: true, msg: 'Post not found' });
-    }
-
-    const updatedPost = Post.findByIdAndUpdate(req.params.id);
-    
-    if (published) updatedPost.published = true;
-
-    updatedPost.save();
-    verify(req.token, updatedPost);
     res.json({ error: false, updatedPost });
 });
 
 exports.post_delete = asyncHandler(async (req, res, next) => {
-    const post = await Post.findById(req.params.id);
-    if (!post) {
-        return res
+    const postID = req.body.postID;
+    const postComments = await Comment.find({ post: postID }).exec();
+    postComments.forEach(async (comment) => {
+        await Comment.findByIdAndDelete(comment._id);
+    })
+
+    const deletedPost = await Post.findByIdAndDelete(postID);
+
+    if (!deletedPost) {
+        res 
             .status(404)
-            .json({ error: true, msg: 'Post not found' });
+            .json({ error: true, msg: 'Post not found' })
     }
-    
-    const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
     res.json({ error: false, deletedPost });
 });
@@ -103,8 +102,7 @@ exports.post_delete = asyncHandler(async (req, res, next) => {
 exports.postId_get = asyncHandler(async (req, res, next) => {
     const { title, text } = req.body;
     const post = await Post.findOne({ 
-        title: title, 
-        published: true, 
+        title: title,  
         text: text
     }).exec();
 
@@ -123,7 +121,7 @@ exports.post_get = asyncHandler(async (req, res, next) => {
 
     if (!post) {
         return res
-            .status(403)
+            .status(404)
             .json({ error: true, msg: 'Post not found' })
     }
 

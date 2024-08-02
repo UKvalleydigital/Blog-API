@@ -43,7 +43,13 @@ Post().getPosts()
     .then(allPosts => {
         createList(allPosts, true, 'post_list')
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+        const recent = document.querySelector('recent');
+        const h2 = document.createElement('h2');
+        h2.textContent = err.message;
+
+        recent.appendChild(h2);
+    });
 
 // Save post data
 function displayPostData (title) {

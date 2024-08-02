@@ -11,12 +11,8 @@ router.post('/post_get', post_controller.post_get);
 
 router.post('/post_form', passport.authorize, passport.verify, post_controller.post_create);
 
-router.put('/post_update', passport.authorize, passport.verify, function (req, res) {
-    post_controller.post_update
-});
+router.put('/post_update', passport.authorize, passport.verify, post_controller.post_delete);
 
-router.delete('/posts_delete', passport.authorize, passport.verify, function (req, res) {
-    post_controller.post_delete
-});
+router.delete('/post_delete', passport.authorize, passport.verify, post_controller.post_delete);
 
 module.exports = router;

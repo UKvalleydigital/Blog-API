@@ -19,6 +19,7 @@ form.addEventListener('submit', (e) => {
         .then(res => res.json())
         .then(res => res.token)
         .then(token => {
+            localStorage.removeItem('token');
             localStorage.setItem('token', token);
             window.location.href = '../../normal_website/pages/home.html';
         })

@@ -34,7 +34,11 @@
 }
 
 i:hover {
-    opacity: 0.5;
+    opacity: 0.6;
+}
+
+button:hover {
+    opacity: 0.85;
 }
 
 button {
@@ -44,6 +48,10 @@ button {
     border: none;
     max-width: fit-content;
     padding: 4px 12px;
+}
+
+.edit_button, .delete_button {
+    background-color: rgb(212, 0, 0);
 }
 
 h2, p {

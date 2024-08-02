@@ -10,9 +10,9 @@ function Post () {
         
         const url = 'http://localhost:3000/post_form';
         const response = await fetch (url, {
-                method: 'POST',
-                body: jsonData,
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            method: 'POST',
+            body: jsonData,
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
         const json = await response.json();
@@ -46,11 +46,41 @@ function Post () {
         return id;
     };
 
-    const updatePost = async () => {
+    const updatePost = async (id) => {
+        const url = 'http://localhost:3000/post_update';
+        const response = await fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify({ postID: id }),
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
 
+        const json = await response.json();
+        if (json.error) {
+            throw new Error(json.msg);
+        }
+        return json;
+
+        // const updatedPost = await json.updatedPost;
+        // return updatedPost;
     };
 
-    const deletePost = async () => {};
+    const deletePost = async (id) => {
+        const url = 'http://localhost:3000/post_delete/';
+        const response = await fetch(url, {
+            method: 'DELETE',
+            body: JSON.stringify({ postID: id }),
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+
+        const json = await response.json();
+        if (json.error) {
+            throw new Error(json.msg);
+        }
+
+        return json;
+        // const deletedPost = await json.deletedPost;
+        // return deletedPost;
+    };
 
     const getPosts = async () => {
         const url = 'http://localhost:3000/posts';

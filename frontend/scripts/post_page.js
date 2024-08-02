@@ -1,10 +1,15 @@
 import Comment from "./elements/comment.js";
 import User from "./elements/account.js";
+import { Post, givePostForm } from "./elements/post.js";
 
 // Get profile info
 User().getProfileInfo()
-    .then(userEmail => User().createUserProfile(userEmail))
-    .catch(err => console.log(err));
+.then(userEmail => User().createUserProfile(userEmail))
+.catch(err => console.log(err));
+
+
+
+/*--POST OPERATIONS--*/
 
 // Post data function
 async function getPostData (id) {
@@ -12,7 +17,6 @@ async function getPostData (id) {
     const jsonData = JSON.stringify(data);
     
     const url = `http://localhost:3000/post_get`;
-    
     const response = await fetch(url, {
         method: 'POST',
         body: jsonData
@@ -26,6 +30,95 @@ async function getPostData (id) {
     const post = await json.post;
     return post;
 };
+
+// Create page with post data
+function createPage (data, comments) {
+    const h2 = document.createElement('h2');
+    const p1 = document.createElement('p');
+    const p2 = document.createElement('p')
+    const ul = document.createElement('ul');
+    const ul2 = document.createElement('ul');
+    const div = document.querySelector('.post_data');
+    
+    if (!data) {
+        p1.textContent = 'Post not available';
+        div.appendChild(p1);
+    }
+    
+    ul.classList.add('.comment_data');
+    
+    h2.textContent = data.title;
+    p2.textContent = data.text;
+    
+    div.appendChild(h2);
+    div.appendChild(p1);
+    div.appendChild(p2);
+    
+    if (comments.length <= 0) {
+        const li = document.createElement('li');
+        li.textContent = 'Nothing to see here. Wanna comment?';
+        const section = document.querySelector('.comment_data');
+        
+        ul2.appendChild(li)
+        section.appendChild(ul2);
+        div.appendChild(section);
+    } else {
+        // Loop through and display each comment
+        comments.forEach(comment => {
+            createPageComment(comment, ul2);
+        });
+    }
+};
+
+const postID = localStorage.getItem('postID');
+
+// Get post data
+getPostData(postID)
+    .then(post => {
+        Comment().getComments(postID)
+        .then(comments => createPage(post, comments))
+        .catch(err => console.log(err))
+        
+    })
+    .catch(() => createPage(post, comments));
+
+// Edit post
+const editButton = document.querySelector('.edit_button');
+editButton.onclick = (e) => {
+    Post().updatePost(postID)
+        .then(res => {
+            givePostForm(e)
+        })
+        .catch(err => console.log(err))
+}
+
+// Delete post
+const deleteButton = document.querySelector('.delete_button');
+deleteButton.onclick = () => {
+    Post().deletePost(postID)
+        .then(res => {
+            console.log(res);
+            // window.location.href = 'home.html';
+        })
+        .catch(err => console.log(err));
+};
+
+
+
+/*--COMMENT OPERATIONS--*/
+
+// Get post comments
+const form = document.querySelector('form');
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    getPostData(postID)
+    .then(post => {
+        Comment().createComment(post);
+        e.target.submit();
+    })
+    .catch(err => console.log(err))
+});
 
 // Create comment function
 function createPageComment(comment, ul) {
@@ -69,71 +162,7 @@ function createPageComment(comment, ul) {
     User().getUser(comment.user)
         .then(user => showCommentContent(user))
         .catch(() => showCommentContent(null));
-}
-
-// Create page with post data
-function createPage (data, comments) {
-    const h2 = document.createElement('h2');
-    const p1 = document.createElement('p');
-    const p2 = document.createElement('p')
-    const ul = document.createElement('ul');
-    const ul2 = document.createElement('ul');
-    const div = document.querySelector('.post_data');
-
-    if (!data) {
-        p1.textContent = 'Post not available';
-        div.appendChild(p1);
-    }
-
-    ul.classList.add('.comment_data');
-
-    h2.textContent = data.title;
-    p2.textContent = data.text;
-
-    div.appendChild(h2);
-    div.appendChild(p1);
-    div.appendChild(p2);
-    
-    if (comments.length <= 0) {
-        const li = document.createElement('li');
-        li.textContent = 'Nothing to see here. Wanna comment?';
-        const section = document.querySelector('.comment_data');
-        
-        ul2.appendChild(li)
-        section.appendChild(ul);
-        div.appendChild(section);
-    } else {
-        // Loop through and display each comment
-        comments.forEach(comment => {
-            createPageComment(comment, ul2);
-        });
-    }
 };
-
-const postID = localStorage.getItem('postID');
-
-// Get post data
-getPostData(postID)
-    .then(post => {
-        Comment().getComments(postID)
-            .then(comments => createPage(post, comments))
-            .catch(err => console.log(err))
-
-    })
-    .catch(() => createPage(post, comments))
-
-// Get post comments
-const form = document.querySelector('form');
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    getPostData(postID)
-        .then(post => {
-            Comment().createComment(post);
-            e.target.submit();
-        })
-        .catch(err => console.log(err))
-});
 
 // Edit comment function
 function editComment(data, comment) {
@@ -179,7 +208,6 @@ function editComment(data, comment) {
 }
 
 // Delete comment function
-
 function deleteComment(data, comment) {
     const commentElement = data
         .parentElement
