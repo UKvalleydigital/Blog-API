@@ -74,13 +74,39 @@ User().getProfileInfo()
 // Display form and create post
 const create = document.querySelector('#create');
 create && create.addEventListener('click', (e) => {
-    
     givePostForm(e);
     const form = document.querySelector('.post_form');
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
         Post().createPost()
-            .then(post => console.log(post))
-            .catch(err => console.log(err));
+            .then(() => e.target.submit())
+            .catch((err) => {
+                let temp = document.querySelector('.error');
+                if (temp) temp.remove();
+
+                const error = document.createElement('div');
+                error.classList.add('error');
+                error.textContent = err.message;
+                error.style.color = 'red';
+
+                switch (err.message) {
+                    case 'Title required':
+                        const title = document.querySelector('#Title');
+                        form.insertBefore(error, title)
+                        break;
+                        
+                    case 'Content required':
+                        const text = document.querySelector('#Text');
+                        form.insertBefore(error, text);
+                        break;
+                            
+                    case 'This specific post has already been made':
+                        const label = document.querySelector('.cancel');
+                        form.insertBefore(error, label);
+                        break;
+                }
+            });
     });
 });
 

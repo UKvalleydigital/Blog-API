@@ -41,7 +41,6 @@ exports.post_create = asyncHandler(async (req, res, next) =>{
             .status(404)
             .json({ error: true, msg: 'This specific post has already been made' })
     }
-
     
     const user = req.user;
     const createdPost = new Post({

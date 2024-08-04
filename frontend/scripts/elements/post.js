@@ -16,7 +16,6 @@ function Post () {
         });
 
         const json = await response.json();
-
         if (json.error) {
             throw new Error(json.msg);
         }
@@ -143,6 +142,7 @@ function givePostForm (e) {
     create.classList.add('create');
     create.type = 'submit';
     const cancel = document.createElement('button');
+    cancel.classList.add('cancel');
     cancel.onclick = deletePostForm;
 
     create.textContent = 'Create';
