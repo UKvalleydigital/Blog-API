@@ -11,7 +11,7 @@ router.post('/post_get', post_controller.post_get);
 
 router.post('/post_form', passport.authorize, passport.verify, post_controller.post_create);
 
-router.put('/post_update', passport.authorize, passport.verify, post_controller.post_delete);
+router.put('/post_update', passport.authorize, passport.verify, post_controller.post_update);
 
 router.delete('/post_delete', passport.authorize, passport.verify, post_controller.post_delete);
 

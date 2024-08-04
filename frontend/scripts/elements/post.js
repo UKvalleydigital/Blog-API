@@ -46,11 +46,11 @@ function Post () {
         return id;
     };
 
-    const updatePost = async (id) => {
+    const updatePost = async (id, title, published, text) => {
         const url = 'http://localhost:3000/post_update';
         const response = await fetch(url, {
             method: 'PUT',
-            body: JSON.stringify({ postID: id }),
+            body: JSON.stringify({ postID: id, title, published, text }),
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
 
@@ -109,7 +109,9 @@ function givePostForm (e) {
     ];
 
     const add = document.querySelector('#create');
-    add.style.visibility = 'hidden';
+    if (add) {
+        add.style.visibility = 'hidden';
+    }
 
     const div = document.createElement('div');
     div.classList.add('form_container');
@@ -158,7 +160,9 @@ function deletePostForm (e) {
     e.preventDefault();
 
     const add = document.querySelector('#create');
-    add.style.visibility = 'visible';
+    if (add) {
+        add.style.visibility = 'visible';
+    }
 
     const div = document.querySelector('.form_container');
     div.remove();

@@ -43,18 +43,18 @@ function createPage (data, comments) {
     if (!data) {
         p1.textContent = 'Post not available';
         div.appendChild(p1);
+    } else {
+        ul.classList.add('.comment_data');
+        
+        h2.textContent = data.title;
+        p2.textContent = data.text;
+        
+        div.appendChild(h2);
+        div.appendChild(p1);
+        div.appendChild(p2);
     }
     
-    ul.classList.add('.comment_data');
-    
-    h2.textContent = data.title;
-    p2.textContent = data.text;
-    
-    div.appendChild(h2);
-    div.appendChild(p1);
-    div.appendChild(p2);
-    
-    if (comments.length <= 0) {
+    if ((!comments) || (comments.length <= 0)) {
         const li = document.createElement('li');
         li.textContent = 'Nothing to see here. Wanna comment?';
         const section = document.querySelector('.comment_data');
@@ -80,16 +80,25 @@ getPostData(postID)
         .catch(err => console.log(err))
         
     })
-    .catch(() => createPage(post, comments));
+    .catch(() => createPage(null, null));
 
 // Edit post
 const editButton = document.querySelector('.edit_button');
 editButton.onclick = (e) => {
-    Post().updatePost(postID)
-        .then(res => {
-            givePostForm(e)
-        })
-        .catch(err => console.log(err))
+    givePostForm(e);
+    document.querySelector('.create').textContent = 'Edit';
+    
+    const form = document.querySelector('.post_form');
+    form.onsubmit = () => {
+        const title = document.querySelector('#Title').value;
+        const published = document.querySelector('#Published').checked;
+        const text = document.querySelector('#Text').value;
+
+        console.log(form, title, published, text);
+        Post().updatePost(postID, title, published, text)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }
 }
 
 // Delete post
@@ -98,7 +107,7 @@ deleteButton.onclick = () => {
     Post().deletePost(postID)
         .then(res => {
             console.log(res);
-            // window.location.href = 'home.html';
+            window.location.href = 'home.html';
         })
         .catch(err => console.log(err));
 };
