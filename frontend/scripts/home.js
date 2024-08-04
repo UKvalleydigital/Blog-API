@@ -81,7 +81,7 @@ create && create.addEventListener('click', (e) => {
 
         Post().createPost()
             .then(() => e.target.submit())
-            .catch((err) => {
+            .catch(err => {
                 let temp = document.querySelector('.error');
                 if (temp) temp.remove();
 

@@ -71,6 +71,18 @@ exports.post_update = asyncHandler(async (req, res, next) => {
         text
     });
 
+    if (!title) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Title required' });
+    }
+
+    if (!text) {
+        return res
+            .status(400)
+            .json({ error: true, msg: 'Content required' });
+    }
+
     if (!updatedPost) {
         res
             .status(404)

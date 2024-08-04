@@ -97,7 +97,27 @@ editButton.onclick = (e) => {
         console.log(form, title, published, text);
         Post().updatePost(postID, title, published, text)
             .then(res => console.log(res))
-            .catch(err => console.log(err))
+            .catch(err => {
+                let temp = document.querySelector('.error');
+                if (temp) temp.remove();
+
+                const error = document.createElement('div');
+                error.classList.add('error');
+                error.textContent = err.message;
+                error.style.color = 'red';
+
+                switch (err.message) {
+                    case 'Title required':
+                        const title = document.querySelector('#Title');
+                        form.insertBefore(error, title)
+                        break;
+                        
+                    case 'Content required':
+                        const text = document.querySelector('#Text');
+                        form.insertBefore(error, text);
+                        break;
+                }
+            });
     }
 }
 
