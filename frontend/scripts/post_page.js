@@ -76,9 +76,8 @@ const postID = localStorage.getItem('postID');
 getPostData(postID)
     .then(post => {
         Comment().getComments(postID)
-        .then(comments => createPage(post, comments))
-        .catch(err => console.log(err))
-        
+            .then(comments => createPage(post, comments))
+            .catch(err => console.log(err));
     })
     .catch(() => createPage(null, null));
 
@@ -118,18 +117,21 @@ editButton.onclick = (e) => {
                         break;
                 }
             });
-    }
-}
+    };
+};
 
 // Delete post
 const deleteButton = document.querySelector('.delete_button');
 deleteButton.onclick = () => {
     Post().deletePost(postID)
-        .then(res => {
-            console.log(res);
-            window.location.href = 'home.html';
-        })
-        .catch(err => console.log(err));
+        .then(() => window.location.href = 'home.html')
+        .catch(err => {
+            const p = document.createElement('p');
+            p.textContent = err.message;
+            p.styles.color = 'red';
+
+            document.querySelector('.content').prepend(p);
+        });
 };
 
 
