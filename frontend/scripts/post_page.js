@@ -86,23 +86,26 @@ const editButton = document.querySelector('.edit_button');
 editButton.onclick = (e) => {
     givePostForm(e);
     document.querySelector('.create').textContent = 'Edit';
+    document.querySelector('.create').classList.add('edit')
+    document.querySelector('.create').classList.remove('create');
     
     const form = document.querySelector('.post_form');
-    form.onsubmit = () => {
+    form.onsubmit = (e) => {
+        e.preventDefault();
+
         const title = document.querySelector('#Title').value;
         const published = document.querySelector('#Published').checked;
         const text = document.querySelector('#Text').value;
 
-        console.log(form, title, published, text);
         Post().updatePost(postID, title, published, text)
-            .then(res => console.log(res))
+            .then(() => e.target.submit())
             .catch(err => {
                 let temp = document.querySelector('.error');
                 if (temp) temp.remove();
 
                 const error = document.createElement('div');
                 error.classList.add('error');
-                error.textContent = err.message;
+                error.textContent = `Edit post failed: ${err.message}`
                 error.style.color = 'red';
 
                 switch (err.message) {
@@ -115,6 +118,8 @@ editButton.onclick = (e) => {
                         const text = document.querySelector('#Text');
                         form.insertBefore(error, text);
                         break;
+                    default:
+                        form.insertBefore(error, document.querySelector('.edit'));
                 }
             });
     };
@@ -126,9 +131,13 @@ deleteButton.onclick = () => {
     Post().deletePost(postID)
         .then(() => window.location.href = 'home.html')
         .catch(err => {
+            let temp = document.querySelector('.error');
+            if (temp) temp.remove();
+
             const p = document.createElement('p');
-            p.textContent = err.message;
-            p.styles.color = 'red';
+            p.textContent = `Delete post failed: ${err.message}`
+            p.style.color = 'red';
+            p.classList.add('error');
 
             document.querySelector('.content').prepend(p);
         });
