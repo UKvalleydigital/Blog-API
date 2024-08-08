@@ -1,4 +1,7 @@
 export default function User () {
+    const colorArray = ['pink', 'peachpuff', 'lightgoldenrodyellow', 'palegreen',
+    'paleturquoise', 'lightskyblue', 'thistle'];
+
     const getProfileInfo = async () => {
         const url = 'http://localhost:3000/profile_info/';
         const response = await fetch(url, { 
@@ -32,31 +35,26 @@ export default function User () {
         const user = await json.user;
         return user;
     }
-
+    
     const createUserProfile = (email) => {
         const container = document.createElement('div');
+        container.classList.add('profile_container');
+        
         const div = document.createElement('div');
-
         div.classList.add('profile');
         const initial = email[0];
         div.textContent = initial;
+        
+        const index = randomIntFromInterval(0, colorArray.length - 1);
+        div.style.backgroundColor = colorArray[index];
 
-        let array = [];
-        const p = document.createElement('p');
-        if (email.length > 6) {
-                for (let i = 0; i < email.length; i++) {
-                if (email[i] === '@') break;
-                array.push(email[i]);
-            }
-        } else {
-            array = email.split('');
-        }
-
-        let name = array.join('');
-        p.textContent = name;
+        const logOut = document.createElement('button');
+        logOut.type = 'submit';
+        logOut.textContent = 'Log out';
+        logOut.classList.add('log_out');
 
         container.appendChild(div);
-        container.appendChild(p);
+        container.appendChild(logOut);
 
         const ul = document.querySelector('.header_list');
         ul.appendChild(container);
@@ -81,3 +79,6 @@ export default function User () {
     return { getProfileInfo, getUser, createUserProfile, getUserPosts };
 }
 
+function randomIntFromInterval(min, max) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}

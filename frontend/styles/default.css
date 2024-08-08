@@ -5,6 +5,10 @@
     font-family: 'Roboto', sans-serif
 }
 
+.profile_container, .profile, .user, .log_out {
+    color: white;
+}
+
 ul {
     display: flex;
     list-style-type: none;
@@ -21,4 +25,37 @@ header {
     text-decoration: none;
     color: rgb(235, 235, 235);
 }
+
+.profile_container {
+    margin-left: auto;
+    margin-right: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 32px;
+    font-size: large;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+}
+
+.log_out {
+    background-color: rgb(212, 0, 0);
+    font-size: small;
+}
+
+.log_out:hover {
+    opacity: 0.95;
+}
+
+
+
 
