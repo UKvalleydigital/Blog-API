@@ -225,13 +225,15 @@ function editComment(data, comment) {
         window.location.href = `post_page.html`;
     }
 
+    
     const form = document.querySelector('.textComment_form');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        const newText = document.querySelector('.text').value;
 
-        Comment().updateComment(comment._id)
+        Comment().updateComment(newText, comment._id)
             .then(() => e.target.submit())
-            .catch(() => {
+            .catch(err => {
                 let value = Boolean(document.querySelector('.one')).valueOf();
                 if (value) {
                     return;
@@ -240,7 +242,7 @@ function editComment(data, comment) {
                 const span = document.createElement('span');
                 span.style.color = 'red';
                 span.classList.add('one');
-                span.textContent = 'Not authorised: you are not the owner of this comment';
+                span.textContent = `Not authorised: ${err.message}`;
 
                 commentElement.appendChild(span);  
             });
@@ -255,8 +257,8 @@ function deleteComment(data, comment) {
         .parentElement;
 
     Comment().deleteComment(comment._id, postID)
-        .then(res => console.log(res))
-        .catch(() => {
+        .then(() => window.location.href = 'post_page.html')
+        .catch(err => {
             let value = Boolean(document.querySelector('.one')).valueOf();
             if (value) {
                 return;
@@ -265,7 +267,7 @@ function deleteComment(data, comment) {
             const span = document.createElement('span');
             span.style.color = 'red';
             span.classList.add('one');
-            span.textContent = 'Not authorised: you are not the owner of this comment';
+            span.textContent = `Not authorised: ${err.message}`;
 
             commentElement.appendChild(span);        
         });

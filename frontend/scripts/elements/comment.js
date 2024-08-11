@@ -34,12 +34,12 @@ export default function Comment () {
         console.log(json);
     };
 
-    const updateComment = async (commentID) => {
+    const updateComment = async (text, commentID) => {
         const url = `http://localhost:3000/comment_update/`;
 
         const response = await fetch(url, {
             method: 'PUT',
-            body: JSON.stringify({ commentID }),
+            body: JSON.stringify({ text, commentID }),
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         })
 

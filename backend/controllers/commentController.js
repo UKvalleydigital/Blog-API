@@ -30,7 +30,7 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.commentId_update = asyncHandler(async (req, res, next) => {
-    const commentID = req.body.commentID;
+    const { text, commentID } = req.body;
     const user = req.user;
     
     const updatedComment = await Comment.findByIdAndUpdate(commentID, { text });
