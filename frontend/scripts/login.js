@@ -31,6 +31,5 @@ form.addEventListener('submit', (e) => {
             err.style.color = 'red';
 
             document.querySelector('.form_container').appendChild(error);
-
         });
 });
