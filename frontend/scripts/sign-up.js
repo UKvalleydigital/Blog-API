@@ -13,15 +13,14 @@ form.addEventListener('submit', (e) => {
     const url = `http://localhost:3000/register`
     fetch(url, {
         method: 'POST',
-        body: jsonData,
-        headers: { 'Content-Type': 'application/json' }
+        body: jsonData
     })
         .then(res => res.json())
         .then(res => res.token)
         .then(token => {
             localStorage.removeItem('token');
             localStorage.setItem('token', token);
-            window.location.href = '../../normal_website/pages/home.html';
+            window.location.href = 'home.html';
         })
         .catch(err => console.log(err));
 });

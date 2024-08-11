@@ -20,7 +20,7 @@ form.addEventListener('submit', (e) => {
         .then(token => {
             localStorage.removeItem('token');
             localStorage.setItem('token', token);
-            window.location.href = '../../normal_website/pages/home.html';
+            window.location.href = 'home.html';
         })
         .catch(err => {
             let temp = document.querySelector('.error');

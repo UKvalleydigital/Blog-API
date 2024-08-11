@@ -46,15 +46,22 @@ export default function User () {
         div.textContent = initial;
         
         const index = randomIntFromInterval(0, colorArray.length - 1);
-        div.style.backgroundColor = colorArray[index];
+        
+        if (!localStorage.getItem('color')) {
+            div.style.backgroundColor = colorArray[index];
+            localStorage.setItem('color', colorArray[index]);
+        } else {
+            div.style.backgroundColor = localStorage.getItem('color');
+        }
 
-        const logOut = document.createElement('button');
-        logOut.type = 'submit';
-        logOut.textContent = 'Log out';
-        logOut.classList.add('log_out');
+        const logOutButton = document.createElement('button');
+        logOutButton.type = 'submit';
+        logOutButton.textContent = 'Log out?';
+        logOutButton.classList.add('log_out');
+        logOutButton.onclick = logOut;
 
         container.appendChild(div);
-        container.appendChild(logOut);
+        container.appendChild(logOutButton);
 
         const ul = document.querySelector('.header_list');
         ul.appendChild(container);
@@ -81,4 +88,9 @@ export default function User () {
 
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function logOut() {
+    localStorage.clear();
+    window.location.href = 'home.html';
 }

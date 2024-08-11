@@ -58,9 +58,6 @@ function Post () {
             throw new Error(json.msg);
         }
         return json;
-
-        // const updatedPost = await json.updatedPost;
-        // return updatedPost;
     };
 
     const deletePost = async (id) => {
@@ -77,8 +74,6 @@ function Post () {
         }
 
         return json;
-        // const deletedPost = await json.deletedPost;
-        // return deletedPost;
     };
 
     const getPosts = async () => {
