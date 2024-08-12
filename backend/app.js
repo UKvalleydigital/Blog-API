@@ -46,6 +46,10 @@ app.use((req, res, next) => {
 
 app.use('/', routes);
 
+// listen at port number
+const port = process.env.PORT || 3000;
+app.listen(port);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
