@@ -16,7 +16,7 @@ app.use(cors());
 
 // Database setup
 mongoose.set('strictQuery', false);
-if (process.env.PROCESS_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   const mongoDB = process.env.DB_URL_PROD;
   main(mongoDB).catch(err => console.log(err));
 } else {
