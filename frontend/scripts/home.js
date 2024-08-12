@@ -67,7 +67,7 @@ function displayPostData (title) {
 /*--ACCOUNT ONLY OPERATIONS--*/
 
 // Show user profile
-User().getProfileInfo()
+localStorage.getItem('token') && User().getProfileInfo()
     .then(userEmail => User().createUserProfile(userEmail))
     .catch(err => console.log(err));
 
@@ -111,7 +111,7 @@ create && create.addEventListener('click', (e) => {
 });
 
 // Display personal user posts
-User().getUserPosts()
+localStorage.getItem('token') && User().getUserPosts()
     .then(myPosts => {
         if (myPosts.length >= 1) {
                 createList(myPosts, false, 'user_list');
