@@ -12,7 +12,10 @@ const routes = require('./routes/index');
 const { errorMonitor } = require('events');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  credentials: true
+}));
 
 // Database setup
 mongoose.set('strictQuery', false);
@@ -38,11 +41,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Write header
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
-});
+
 
 app.use('/', routes);
 
