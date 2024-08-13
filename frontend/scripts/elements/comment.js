@@ -1,7 +1,7 @@
 export default function Comment () {
     const getComments = async (postID) => {
         const data = { postID };
-        const url = `http://localhost:3000/comments_post`;
+        const url = `https://blog-website.adaptable.app/comments_post`;
 
         const response = await fetch(url, {
             method: 'POST',
@@ -18,7 +18,7 @@ export default function Comment () {
     };
 
     const createComment = async (post) => {
-        const url = `http://localhost:3000/comment_form`;
+        const url = `https://blog-website.adaptable.app/comment_form`;
         const text = document.querySelector('#comment').value;
 
         const response = await fetch(url, {
@@ -35,7 +35,7 @@ export default function Comment () {
     };
 
     const updateComment = async (text, commentID) => {
-        const url = `http://localhost:3000/comment_update/`;
+        const url = `https://blog-website.adaptable.app/comment_update/`;
 
         const response = await fetch(url, {
             method: 'PUT',
@@ -52,7 +52,7 @@ export default function Comment () {
     };
 
     const deleteComment = async (commentID, postID) => {
-        const url = `http://localhost:3000/comment_delete`;
+        const url = `https://blog-website.adaptable.app/comment_delete`;
 
         const response = await fetch(url, {
             method: 'DELETE',

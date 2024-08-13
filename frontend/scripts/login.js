@@ -9,7 +9,7 @@ form.addEventListener('submit', (e) => {
     const data = { email, password };
     const jsonData = JSON.stringify(data);
 
-    const url = 'http://localhost:3000/login';
+    const url = 'https://blog-website.adaptable.app/login';
     fetch(url, {
         method: 'POST',
         body: jsonData,

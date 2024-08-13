@@ -16,7 +16,7 @@ async function getPostData (id) {
     const data = { postID: id };
     const jsonData = JSON.stringify(data);
     
-    const url = `http://localhost:3000/post_get`;
+    const url = `https://blog-website.adaptable.app/post_get`;
     const response = await fetch(url, {
         method: 'POST',
         body: jsonData

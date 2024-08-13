@@ -3,7 +3,7 @@ export default function User () {
     'paleturquoise', 'lightskyblue', 'thistle'];
 
     const getProfileInfo = async () => {
-        const url = 'http://localhost:3000/profile_info/';
+        const url = 'https://blog-website.adaptable.app/profile_info/';
         const response = await fetch(url, { 
             method: 'POST',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -20,7 +20,7 @@ export default function User () {
     };
 
     const getUser = async (id) => {
-        const url = 'http://localhost:3000/user_get';
+        const url = 'https://blog-website.adaptable.app/user_get';
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({ id })
@@ -68,7 +68,7 @@ export default function User () {
     };
 
     const getUserPosts = async () => {
-        const url = 'http://localhost:3000/user_posts/'
+        const url = 'https://blog-website.adaptable.app/user_posts/'
         const response =  await fetch(url, { 
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }

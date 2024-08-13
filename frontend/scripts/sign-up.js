@@ -10,7 +10,7 @@ form.addEventListener('submit', (e) => {
     const data = { email, password };
     const jsonData = JSON.stringify(data)
 
-    const url = `http://localhost:3000/register`
+    const url = `https://blog-website.adaptable.app/register`
     fetch(url, {
         method: 'POST',
         body: jsonData
