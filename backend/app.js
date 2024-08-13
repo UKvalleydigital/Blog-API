@@ -12,10 +12,11 @@ const routes = require('./routes/index');
 const { errorMonitor } = require('events');
 
 const app = express();
-app.use(cors({
-  origin: '*',
-  credentials: true
-}));
+const corsOptions = {
+  origin: '*'
+};
+
+app.use(cors(corsOptions));
 
 // Database setup
 mongoose.set('strictQuery', false);

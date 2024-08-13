@@ -44,7 +44,7 @@ Post().getPosts()
         createList(allPosts, true, 'post_list')
     })
     .catch((err) => {
-        const recent = document.querySelector('recent');
+        const recent = document.querySelector('.recent');
         const h2 = document.createElement('h2');
         h2.textContent = err.message;
 
