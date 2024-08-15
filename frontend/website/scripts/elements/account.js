@@ -23,7 +23,10 @@ export default function User () {
         const url = 'http://localhost:5000/user_get';
         const response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify({ id })
+            body: JSON.stringify({ id }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
 
         const json = await response.json();

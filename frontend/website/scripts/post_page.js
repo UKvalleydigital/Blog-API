@@ -19,7 +19,10 @@ async function getPostData (id) {
     const url = `http://localhost:5000/post_get`;
     const response = await fetch(url, {
         method: 'POST',
-        body: jsonData
+        body: jsonData,
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
     
     const json = await response.json();

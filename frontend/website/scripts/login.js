@@ -13,7 +13,9 @@ form.addEventListener('submit', (e) => {
     fetch(url, {
         method: 'POST',
         body: jsonData,
-        'Content-Type': 'application/json' 
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
         .then(res => res.json())
         .then(json => {
