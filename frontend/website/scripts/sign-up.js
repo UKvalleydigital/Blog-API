@@ -8,16 +8,24 @@ form.addEventListener('submit', (e) => {
     const password = document.querySelector('#password').value;
 
     const data = { email, password };
-    const jsonData = JSON.stringify(data)
+    const jsonData = JSON.stringify(data);
+    console.log(data, jsonData);
 
     const url = `http://localhost:5000/register`
     fetch(url, {
         method: 'POST',
-        body: jsonData
+        body: jsonData,
+        headers: {
+            'Content-Type': 'application/json' 
+        }
     })
         .then(res => res.json())
-        .then(res => res.token)
+        .then(json => {
+            if (json.error) throw new Error (json.msg);
+            console.log(json);
+        })
         .then(token => {
+            console.log(token);
             localStorage.setItem('token', token);
             window.location.href = 'home.html';
         })

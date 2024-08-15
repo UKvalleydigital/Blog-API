@@ -5,6 +5,7 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const email = document.querySelector('#email').value;
+    console.log(email);
     const password = document.querySelector('#password').value;
     const data = { email, password };
     const jsonData = JSON.stringify(data);
@@ -15,7 +16,10 @@ form.addEventListener('submit', (e) => {
         body: jsonData
     })
         .then(res => res.json())
-        .then(res => res.token)
+        .then(json => {
+            if (json.error) throw new Error (json.msg);
+            return json.token;
+        })
         .then(token => {
             localStorage.setItem('token', token);
             window.location.href = 'home.html';

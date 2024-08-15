@@ -106,7 +106,7 @@ exports.user_login = asyncHandler(async (req, res, next) => {
 
 exports.user_register = asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
-    
+
     if (!email) {
         return res
             .status(400)
