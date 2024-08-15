@@ -46,6 +46,7 @@ backend
    |   |   |__ form.css
    |   |   |__ page.css
    |   |   |__ post.css
+```
 
 ## How to use
 - The home page allows you to view recent posts.
@@ -72,5 +73,9 @@ npm run start < br/>
 Open home.html file in browser < br/>
 
 ## Screenshots:
+
+![Screenshot_2024-08-15_18-49-02](https://github.com/user-attachments/assets/df413994-1ada-4f4d-8198-cd0dc54b38a2)
+
+![Screenshot_2024-08-15_18-32-43 (copy 1)](https://github.com/user-attachments/assets/c35d1e37-3fda-460d-8cae-2981c11513d9)
 
 
