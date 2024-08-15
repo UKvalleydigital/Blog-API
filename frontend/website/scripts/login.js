@@ -12,8 +12,7 @@ form.addEventListener('submit', (e) => {
     const url = 'https://blog-website.adaptable.app/login';
     fetch(url, {
         method: 'POST',
-        body: jsonData,
-        headers: { 'Content-Type': 'application/json' }
+        body: jsonData
     })
         .then(res => res.json())
         .then(res => res.token)
