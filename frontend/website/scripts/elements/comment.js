@@ -24,7 +24,10 @@ export default function Comment () {
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({ post, text }),
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json' 
+            }
         });
 
         const json = await response.json();
@@ -40,7 +43,10 @@ export default function Comment () {
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify({ text, commentID }),
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json' 
+            }
         })
 
         const json = await response.json();
@@ -57,7 +63,10 @@ export default function Comment () {
         const response = await fetch(url, {
             method: 'DELETE',
             body: JSON.stringify({ commentID, postID }),
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json' 
+            }
         })
         
         const json = await response.json();

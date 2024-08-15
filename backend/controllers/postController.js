@@ -18,6 +18,7 @@ exports.post_list = asyncHandler(async (req, res, next) => {
 exports.post_create = asyncHandler(async (req, res, next) =>{
     const { comments, published, title, text } = req.body;
     
+    res.json({ comments, published, title, text, user: req.user });
     if (!Array.isArray(comments)) {
         comments = typeof comments === 'undefined'
         ? [] : [comments];

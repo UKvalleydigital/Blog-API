@@ -5,7 +5,6 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const email = document.querySelector('#email').value;
-    console.log(email);
     const password = document.querySelector('#password').value;
     const data = { email, password };
     const jsonData = JSON.stringify(data);
@@ -13,7 +12,8 @@ form.addEventListener('submit', (e) => {
     const url = 'http://localhost:5000/login';
     fetch(url, {
         method: 'POST',
-        body: jsonData
+        body: jsonData,
+        'Content-Type': 'application/json' 
     })
         .then(res => res.json())
         .then(json => {
@@ -30,7 +30,7 @@ form.addEventListener('submit', (e) => {
 
             const error = document.createElement('div');
             error.textContent = `Login failed: ${err.message}`;
-            err.style.color = 'red';
+            error.style.color = 'red';
 
             document.querySelector('.form_container').appendChild(error);
         });

@@ -22,7 +22,7 @@ form.addEventListener('submit', (e) => {
         .then(res => res.json())
         .then(json => {
             if (json.error) throw new Error (json.msg);
-            console.log(json);
+            return json.token;
         })
         .then(token => {
             console.log(token);

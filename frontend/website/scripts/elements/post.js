@@ -12,7 +12,10 @@ function Post () {
         const response = await fetch (url, {
             method: 'POST',
             body: jsonData,
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}` ,
+                'Content-Type': 'application/json'
+            }
         });
 
         const json = await response.json();
@@ -33,7 +36,10 @@ function Post () {
         const url = `http://localhost:5000/postID`;
         const response = await fetch(url, {
             method: 'POST',
-            body: jsonData
+            body: jsonData,
+            headers: {
+                'Content-Type': 'application/json' 
+            }
         })
         
         const json = await response.json();
@@ -50,7 +56,10 @@ function Post () {
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify({ postID: id, title, published, text }),
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json' 
+            }
         });
 
         const json = await response.json();
@@ -65,7 +74,10 @@ function Post () {
         const response = await fetch(url, {
             method: 'DELETE',
             body: JSON.stringify({ postID: id }),
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'  
+            }
         });
 
         const json = await response.json();

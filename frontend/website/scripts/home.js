@@ -80,7 +80,7 @@ create && create.addEventListener('click', (e) => {
         e.preventDefault();
 
         Post().createPost()
-            .then(() => e.target.submit())
+            .then((res) => console.log(res))
             .catch(err => {
                 let temp = document.querySelector('.error');
                 if (temp) temp.remove();
