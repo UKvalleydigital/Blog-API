@@ -19,6 +19,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Set header
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+})
+
 // Database setup
 mongoose.set('strictQuery', false);
 if (process.env.NODE_ENV === 'production') {
@@ -39,7 +45,6 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 
 app.use('/', routes);
