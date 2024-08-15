@@ -3,7 +3,7 @@ This is a full stack blog website. You can create, edit and delete accounts, pos
 
 ## Brief structure for frontend directory:
 
-.gitignore
+! [.gitignore
 README.md
 backend
    |__ app.js
@@ -45,9 +45,7 @@ backend
    |   |   |__ default.css
    |   |   |__ form.css
    |   |   |__ page.css
-   |   |   |__ post.css
-
-## Structure for backend directory
+   |   |   |__ post.css]
 
 ## How to use
 - The home page allows you to view recent posts.
