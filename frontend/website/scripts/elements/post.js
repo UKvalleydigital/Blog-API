@@ -8,7 +8,7 @@ function Post () {
         const data = { comments, title, published, text };
         const jsonData = JSON.stringify(data);
         
-        const url = 'https://blog-website.adaptable.app/post_form';
+        const url = 'http://localhost:5000/post_form';
         const response = await fetch (url, {
             method: 'POST',
             body: jsonData,
@@ -30,7 +30,7 @@ function Post () {
         const data = { title, text };
         const jsonData = JSON.stringify(data);
         
-        const url = `https://blog-website.adaptable.app/postID`;
+        const url = `http://localhost:5000/postID`;
         const response = await fetch(url, {
             method: 'POST',
             body: jsonData
@@ -46,7 +46,7 @@ function Post () {
     };
 
     const updatePost = async (id, title, published, text) => {
-        const url = 'https://blog-website.adaptable.app/post_update';
+        const url = 'http://localhost:5000/post_update';
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify({ postID: id, title, published, text }),
@@ -61,7 +61,7 @@ function Post () {
     };
 
     const deletePost = async (id) => {
-        const url = 'https://blog-website.adaptable.app/post_delete/';
+        const url = 'http://localhost:5000/post_delete/';
         const response = await fetch(url, {
             method: 'DELETE',
             body: JSON.stringify({ postID: id }),
@@ -77,8 +77,8 @@ function Post () {
     };
 
     const getPosts = async () => {
-        const url = 'https://blog-website.adaptable.app/posts';
-        const response = await fetch(url, { method: 'GET' });
+        const url = 'http://localhost:5000/posts';
+        const response = await fetch(url);
 
         const json = await response.json();
         if (json.error) {

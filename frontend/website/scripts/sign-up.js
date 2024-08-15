@@ -10,7 +10,7 @@ form.addEventListener('submit', (e) => {
     const data = { email, password };
     const jsonData = JSON.stringify(data)
 
-    const url = `https://blog-website.adaptable.app/register`
+    const url = `http://localhost:5000/register`
     fetch(url, {
         method: 'POST',
         body: jsonData
@@ -18,7 +18,6 @@ form.addEventListener('submit', (e) => {
         .then(res => res.json())
         .then(res => res.token)
         .then(token => {
-            localStorage.removeItem('token');
             localStorage.setItem('token', token);
             window.location.href = 'home.html';
         })
