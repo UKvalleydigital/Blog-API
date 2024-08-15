@@ -1,6 +1,52 @@
 # Blog App
 This is a full stack blog website. You can create, edit and delete accounts, posts and comments. 
 
+## Brief structure for frontend directory:
+```
+.gitignore
+README.md
+backend
+   |__ app.js
+   |__ /bin
+   |__ /config
+   |   |__ passport.js
+   |__ /controllers
+   |   |__ commentController.js
+   |   |__ postController.js
+   |   |__ userController.js
+   |__ /models
+   |   |__ comment.js
+   |   |__ post.js
+   |   |__ user.js
+   |__ package-lock.json
+   |__ package.json
+   |__ /public
+   |
+   |__ /routes
+   |   |__ comments.js
+   |   |__ index.js
+   |   |__ posts.js
+   |   |__ users.js
+/frontend
+   |__ package-lock.json
+   |__ package.json
+   |__ /website
+   |   |__ home.html
+   |   |__ login.html
+   |   |__ post_page.html
+   |   |__ /scripts
+   |   |   |__ /elements
+   |   |   |__ home.js
+   |   |   |__ login.js
+   |   |   |__ post_page.js
+   |   |   |__ sign-up.js
+   |   |__ sign-up.html
+   |   |__ /styles
+   |   |   |__ default.css
+   |   |   |__ form.css
+   |   |   |__ page.css
+   |   |   |__ post.css
+
 ## How to use
 - The home page allows you to view recent posts.
 - Go to the register page if you would like to create an account. Input your details and submit. This will redirect you back to the home page.
