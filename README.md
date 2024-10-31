@@ -68,8 +68,8 @@ mongoDB database.
 Run these commands in your terminal:
 
 ```
-cd backend <br/>
-npm run start <br/>
+cd backend
+npm run start
 ```
 
 Open home.html file in browser <br/>
