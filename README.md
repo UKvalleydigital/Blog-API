@@ -62,15 +62,17 @@ backend
 - Click the logout button on your profile to logout.
 
 ## Run locally on your own computer:
+Create .env file, fill in environment variables, and create and link to a test
+mongoDB database.
 
 Run these commands in your terminal:
 
 ```
-cd backend < br/>
-npm run start < br/>
+cd backend <br/>
+npm run start <br/>
 ```
 
-Open home.html file in browser < br/>
+Open home.html file in browser <br/>
 
 ## Screenshots:
 
