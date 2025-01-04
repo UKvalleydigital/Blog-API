@@ -1,5 +1,5 @@
 # Blog App
-This is a full stack blog website. You can create, edit and delete accounts, posts and comments. 
+This is a full stack blog website. You can create, edit and delete accounts, posts and comments. It is not currently being hosted.
 
 ## Brief structure for frontend directory:
 ```
@@ -59,20 +59,7 @@ backend
 - You can create, edit, or delete your own posts.
 - View your posts on the home page.
 - You can create, edit, or delete your own comments.
-- Click the logout button on your profile to logout.
-
-## Run locally on your own computer:
-Create .env file, fill in environment variables, and create and link to a test
-mongoDB database.
-
-Run these commands in your terminal:
-
-```
-cd backend
-npm run start
-```
-
-Open home.html file in browser <br/>
+- Click the logout button on your profile to 
 
 ## Screenshots:
 
